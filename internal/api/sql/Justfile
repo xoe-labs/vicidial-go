@@ -1,0 +1,349 @@
+astguiRoot := "$HOME/ghq/git.p1.rocks/gitops/goautodial.k8s/app/astguiclient/"
+schemaTarget := "./generated"
+sourcePath := "./src-copy"
+
+default:
+	rm -r {{schemaTarget}} {{sourcePath}}
+	mkdir -p {{sourcePath}} {{schemaTarget}}
+	just extract-schema
+	just extract-queries
+	just generate-table-sql
+	just categorize-files
+
+extract-schema:
+	#! /usr/bin/env bash
+	# copy over schema
+	cp {{astguiRoot}}/extras/MySQL_AST_CREATE_tables.sql \
+	   {{sourcePath}}/schema.sql
+	# Some fixes required for sqlc
+	sed -i "s|DOUBLE|FLOAT|g" 								{{sourcePath}}/schema.sql
+	sed -i "s|^action |\`action\` |g" 						{{sourcePath}}/schema.sql
+	sed -i "s|^status |\`status\` |g" 						{{sourcePath}}/schema.sql
+	sed -i "s|^200_date |\`200_date\` |g" 					{{sourcePath}}/schema.sql
+	sed -i "s|PRIMARY KEY NOT NULL|PRIMARY KEY|g" 			{{sourcePath}}/schema.sql
+	sed -i "s|UNIQUE NOT NULL|NOT NULL UNIQUE|g" 			{{sourcePath}}/schema.sql
+	sed -i "s|NOT NULL UNIQUE PRIMARY KEY|PRIMARY KEY|g" 	{{sourcePath}}/schema.sql
+	# uniform some keywords for some regexes in this file
+	sed -i "s| limit | LIMIT |g" 							{{sourcePath}}/schema.sql
+	sed -i "s|count(|COUNT(|g" 								{{sourcePath}}/schema.sql
+	sed -i "s|select |SELECT |g" 							{{sourcePath}}/schema.sql
+	sed -i "s|insert |INSERT |g" 							{{sourcePath}}/schema.sql
+	sed -i "s|update |UPDATE |g" 							{{sourcePath}}/schema.sql
+	sed -i "s|delete |DELETE |g" 							{{sourcePath}}/schema.sql
+
+
+generate-table-sql:
+	#! /usr/bin/env bash
+	# extract create alter table statments only
+	while read -rd ';' sql; do
+	  pat='^(CREATE|ALTER) TABLE (\w+).*'
+	  if [[ "$sql" =~ $pat ]]; then
+	    echo "$sql;" >> 										"{{schemaTarget}}/${BASH_REMATCH[2]}.sql"
+	  fi
+	done < 														{{sourcePath}}/schema.sql
+	# remove unused tables
+	for file in $(fd .sql {{schemaTarget}}); do
+	  table=$(basename "${file%.sql}")
+	  [[ ! $(rg $table {{sourcePath}}/all-crud-statements.sql) ]] && rm $file
+	done
+	# append query statments per table
+	table_array=($(fd .sql {{schemaTarget}} | xargs -n1 -I{} basename {} | cut -f 1 -d '.'))
+	while read -r line; do
+	  for table in ${table_array[@]}; do
+	     pattern="( |,)$table(,|;| )"
+	     if [[ "$line" =~ $pattern ]]; then
+	        pat='(bin/.*\.pl:[0-9]+):(.*)'; [[ "$line" =~ $pat ]]
+	        file="${BASH_REMATCH[1]}"
+	        stmt="${BASH_REMATCH[2]}"
+	        echo -e "\n\n" >> 									"{{schemaTarget}}/$table.sql"
+	        echo "/* $file */" >> 								"{{schemaTarget}}/$table.sql"
+	        echo -e "\n" >> 									"{{schemaTarget}}/$table.sql"
+	        camelCaseTable=$(echo "$table" | sed -r 's/(^|_)([a-z])/\U\2/g')
+	        sel_count_pat='^SELECT COUNT'
+	        if [[ "$stmt" =~ $sel_count_pat ]]; then
+	          prefix="Count"
+	    	  op="one"
+	        elif [[ "$stmt" =~ ^SELECT ]]; then
+	          prefix="Get"
+	          pat_select='LIMIT 1;'
+	          if [[ "$stmt" =~ $pat_select ]]; then
+	    	    op="one"
+	          else
+	            op="many"
+	          fi
+	        elif [[ "$stmt" =~ ^DELETE ]]; then
+	          prefix="Delete"
+	          op="exec"
+	        elif [[ "$stmt" =~ ^INSERT ]]; then
+	          prefix="Create"
+	          op="execresult"
+	        elif [[ "$stmt" =~ ^UPDATE ]]; then
+	          prefix="Update"
+	          op="exec"
+	        fi
+	        echo "/* name: $prefix$camelCaseTable :$op */" >> 	"{{schemaTarget}}/$table.sql"
+	        echo "$stmt" >> 									"{{schemaTarget}}/$table.sql"
+	     fi
+	  done
+	done < 														{{sourcePath}}/all-crud-statements.sql
+
+clear-categorize-files:
+	rm -rf {{schemaTarget}}/channels || true
+	rm -rf {{schemaTarget}}/metadata || true
+	rm -rf {{schemaTarget}}/vicilogs || true
+	rm -rf {{schemaTarget}}/manager  || true
+	rm -rf {{schemaTarget}}/server   || true
+
+categorize-files: clear-categorize-files
+	mkdir -p {{schemaTarget}}/channels
+	mv {{schemaTarget}}/cid_channels_recent.sql 		{{schemaTarget}}/channels/
+	mv {{schemaTarget}}/live_channels.sql 				{{schemaTarget}}/channels/
+	mv {{schemaTarget}}/live_inbound.sql 				{{schemaTarget}}/channels/
+	mv {{schemaTarget}}/live_sip_channels.sql 			{{schemaTarget}}/channels/
+	mv {{schemaTarget}}/parked_channels.sql 			{{schemaTarget}}/channels/
+	mv {{schemaTarget}}/parked_channels_recent.sql 		{{schemaTarget}}/channels/
+	mkdir -p {{schemaTarget}}/metadata
+	mv {{schemaTarget}}/phones.sql 						{{schemaTarget}}/metadata/
+	mv {{schemaTarget}}/servers.sql 					{{schemaTarget}}/metadata/
+	mv {{schemaTarget}}/system_settings.sql 			{{schemaTarget}}/metadata/
+	mv {{schemaTarget}}/vicidial_campaigns.sql 			{{schemaTarget}}/metadata/
+	mv {{schemaTarget}}/vicidial_campaign_dnc.sql 		{{schemaTarget}}/metadata/
+	mv {{schemaTarget}}/vicidial_list.sql 				{{schemaTarget}}/metadata/  # leads
+	mv {{schemaTarget}}/vicidial_live_agents.sql 		{{schemaTarget}}/metadata/
+	mv {{schemaTarget}}/vicidial_list_alt_phones.sql 	{{schemaTarget}}/metadata/
+	mv {{schemaTarget}}/vicidial_dnc.sql 				{{schemaTarget}}/metadata/
+	mv {{schemaTarget}}/vicidial_inbound_groups.sql 	{{schemaTarget}}/metadata/
+	mkdir -p {{schemaTarget}}/vicilogs
+	mv {{schemaTarget}}/call_log.sql 					{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/park_log.sql 					{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/recording_log.sql 				{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/vicidial_carrier_log.sql 		{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/vicidial_closer_log.sql 		{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/vicidial_cpd_log.sql 			{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/vicidial_dial_log.sql 			{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/vicidial_drop_log.sql 			{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/vicidial_dtmf_log.sql 			{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/vicidial_log.sql 				{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/vicidial_log_extended.sql 		{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/vicidial_rt_monitor_log.sql 	{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/vicidial_sip_event_log.sql 		{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/vicidial_sip_event_recent.sql 	{{schemaTarget}}/vicilogs/
+	mv {{schemaTarget}}/vicidial_lead_call_quota_counts.sql {{schemaTarget}}/vicilogs/
+	mkdir -p {{schemaTarget}}/manager
+	mv {{schemaTarget}}/vicidial_manager.sql 			{{schemaTarget}}/manager/
+	mv {{schemaTarget}}/vicidial_hopper.sql 			{{schemaTarget}}/manager/
+	mv {{schemaTarget}}/vicidial_auto_calls.sql 		{{schemaTarget}}/manager/
+	mkdir -p {{schemaTarget}}/server
+	mv {{schemaTarget}}/server_updater.sql 				{{schemaTarget}}/server/
+	mv {{schemaTarget}}/server_performance.sql 			{{schemaTarget}}/server/
+
+
+query:
+	rg -nH -v '^\s*#' {{astguiRoot}}/bin | sed 's|\\n||g' | sed 's|\\t||g' | sed 's|\\"|'"'"'|g' | sed 's|\\||g' | \
+	  rg -oS \
+	    '(^.*?:\d+:).*?"((?:update|delete|select|insert|create|alter|lock tables|unlock tables)[^;]+);' \
+	    -r '$1$2' | sed 's|"$||g'
+
+extract-queries:
+	#! /usr/bin/env bash
+	rg -nH -v '^\s*#' {{astguiRoot}}/bin \
+	  | sed 's|\\n||g' \
+	  | sed 's|\\t||g' \
+	  | sed 's|\\"|'"'"'|g' \
+	  | sed 's|\\||g' | \
+	  rg -oS \
+	    '(^.*?:\d+:).*?"((?:update|delete|select|insert|create|alter|lock tables|unlock tables)[^;]+);' \
+	    -r '$1$2;' \
+	    | sed 's|";$|;|g' \
+	    | sed "s|\"|'|g" \
+	    | sed "s| ' . | |g" \
+	    > 									{{sourcePath}}/all-statements.sql
+	just _cleanup-sql 						{{sourcePath}}/all-statements.sql
+	just _clean-queries 					{{sourcePath}}/all-statements.sql
+	cp 										{{sourcePath}}/all-statements.sql \
+	   										{{sourcePath}}/all-statments-unpurged.sql
+	just _purge-unused 						{{sourcePath}}/all-statements.sql
+	while read -r line; do
+	  pat='(bin/.*\.pl:[0-9]+):(.*)'; [[ "$line" =~ $pat ]]
+	  stmt="${BASH_REMATCH[2]}"
+	  if [[ "$stmt" =~ (^SELECT|^UPDATE|^INSERT|^DELETE) ]]; then
+	    echo "$line" >> 					{{sourcePath}}/all-crud-statements.sql
+	  else
+	    echo "$line" >> 					{{sourcePath}}/all-non-crud-statements.sql
+	  fi
+	done < 									{{sourcePath}}/all-statements.sql
+
+regex:
+	regex="'\\\$.*?(?<!{)'(?!})"; echo $regex
+
+_clean-queries file="./all-statements.sql":
+	sed -i "s@{{astguiRoot}}/@@g" 							{{file}} # Remove unnecessary path prefix
+	sed -i "s|UNIX_TIMESTAMP|UTC_TIMESTAMP|g" 				{{file}} # Though valid spec, sqlc doesn't recognize UNIX_TIMESTAMP
+	regex="'\\\$(.*?(?<!{))'(?!})"; \
+	  perl -pi -e "s|$regex|?/* \1 */|g" 					{{file}} # replace '$---' & '$---{'--'}' variables by '?'
+	regex="'' \. \\\$(.*?) \. ''"; \
+	  perl -pi -e "s|$regex|?/* \1 */|g" 					{{file}} # replace  '' . $--- . '' variables by '?'
+	regex="'' \. \\\$(.*?) \.''"; \
+	  perl -pi -e "s|$regex|?/* \1 */|g" 					{{file}} # replace  '' . $--- .'' variables by '?'
+	regex="\\\$(.+?})"; \
+	  perl -pi -e "s|$regex|?/* \1 */|g" 					{{file}} # replace $---{'--'} variables by '?'
+	regex="=\\\$(\w+)"; \
+	  perl -pi -e "s|$regex|=?/* \1 */|g" 					{{file}} # replace  =$--- variables by '?'
+	regex="'([%A-Za-z: ]+?\\\$.*?)'"; \
+	  perl -pi -e "s|$regex|?/* \"\1\" */|g" 		 		{{file}} # replace '--- $----' variables by '?'
+	regex="\(' \. \("; \
+	  perl -pi -e "s|$regex||g" 		 					{{file}} # replace (' . ( by
+	regex="\(' \. "; \
+	  perl -pi -e "s|$regex||g" 		 					{{file}} # replace (' .  by
+	regex="\) \. '\)"; \
+	  perl -pi -e "s|$regex||g" 		 					{{file}} # replace ) . ') by
+	regex=" \. ' ?\)"; \
+	  perl -pi -e "s|$regex||g" 		 					{{file}} # replace  . ') or  . ' ) by
+
+_purge-unused file="./all-statements.sql":
+	#! /usr/bin/env bash
+	sed -i "s|bin/ADMIN_adjust_GMTnow_on_leads.pl:.*||g" 	{{file}}
+	sed -i "s|bin/ADMIN_archive_log_tables.pl:.*||g" 		{{file}}
+	sed -i "s|bin/ADMIN_area_code_populate.pl:.*||g" 		{{file}}
+	sed -i "s|bin/ADMIN_audio_store_sync.pl:.*||g" 			{{file}}
+	sed -i "s|bin/ADMIN_backup.pl:.*||g" 					{{file}}
+	sed -i "s|bin/ADMIN_bcrypt_convert.pl:.*||g" 			{{file}}
+	sed -i "s|bin/ADMIN_keepalive_ALL.pl:.*||g" 			{{file}} # -- keep as perl: not interfacing with AMI
+	sed -i "s|bin/ADMIN_purge_log_tables.pl:.*||g" 			{{file}}
+	sed -i "s|bin/ADMIN_qm_sync.pl:.*||g" 					{{file}}
+	sed -i "s|bin/ADMIN_reset_failed_count.pl:.*||g" 		{{file}}
+	sed -i "s|bin/ADMIN_timeclock_auto_logout.pl:.*||g" 	{{file}} # -- keep as perl: not interfacing with AMI
+	sed -i "s|bin/ADMIN_update_archive_url.pl:.*||g" 		{{file}}
+	sed -i "s|bin/ADMIN_update_server_ip.pl:.*||g" 			{{file}}
+	sed -i "s|bin/ADMIN_www_languages.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_agent_daily_SPHfront.pl:.*||g" 		{{file}}
+	sed -i "s|bin/AST_agent_daily_SPH.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_agent_day.pl:.*||g" 					{{file}}
+	sed -i "s|bin/AST_agent_logout.pl:.*||g" 				{{file}}
+	sed -i "s|bin/AST_agent_wait_check.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_agent_week.pl:.*||g" 					{{file}}
+	sed -i "s|bin/AST_agent_week_tally.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_chat_timeout_cron.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_cleanup_agent_log.pl:.*||g" 			{{file}} # -- keep as perl: not interfacing with AMI
+	sed -i "s|bin/AST_conf_update_3way.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_conf_update.pl:.*||g" 				{{file}}
+	sed -i "s|bin/AST_CRON_audio_1_move_mix.pl:.*||g" 		{{file}} # -- keep as perl: not interfacing with AMI
+	sed -i "s|bin/AST_CRON_audio_1_move_VDonly.pl:.*||g" 	{{file}}
+	sed -i "s|bin/AST_CRON_audio_2_compress.pl:.*||g" 		{{file}} # -- keep as perl: not interfacing with AMI
+	sed -i "s|bin/AST_CRON_audio_2_encrypt.pl:.*||g" 		{{file}}
+	sed -i "s|bin/AST_CRON_audio_3_ftp_FTPSSL.pl:.*||g" 	{{file}}
+	sed -i "s|bin/AST_CRON_audio_3_ftp.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_CRON_audio_3_newftp.pl:.*||g" 		{{file}}
+	sed -i "s|bin/AST_CRON_audio_4_ftp2_FTPSSL.pl:.*||g" 	{{file}}
+	sed -i "s|bin/AST_CRON_audio_4_ftp2.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_CRON_GSM_SALE_recordings.pl:.*||g" 	{{file}}
+	sed -i "s|bin/AST_CRON_purge_recordings.pl:.*||g" 		{{file}}
+	sed -i "s|bin/AST_DB_action.pl:.*||g" 					{{file}}
+	sed -i "s|bin/AST_DB_calltime_change.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_DB_check_tables.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_DB_dead_cb_purge.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_DB_DNC_filter.pl:.*||g" 				{{file}}
+	sed -i "s|bin/AST_DB_lead_status_change.pl:.*||g" 		{{file}}
+	sed -i "s|bin/AST_DB_optimize.pl:.*||g" 				{{file}}
+	sed -i "s|bin/AST_DB_territory_populate.pl:.*||g" 		{{file}}
+	sed -i "s|bin/AST_DB_tz_divide.pl:.*||g" 				{{file}}
+	sed -i "s|bin/AST_dialer_inventory_snapshot.pl:.*||g" 	{{file}}
+	sed -i "s|bin/AST_DNCcom_filter.pl:.*||g" 				{{file}}
+	sed -i "s|bin/AST_droplist_process.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_flush_DBqueue.pl:.*||g" 				{{file}} # -- keep as perl: not interfacing with AMI
+	sed -i "s|bin/AST_GDPR_audio_purge.pl:.*||g" 			{{file}}
+	# sed -i "s|bin/AST_manager_kill_hung_congested.pl:.*||g" {{file}}
+	# sed -i "s|bin/AST_manager_listen_AMI2.pl:.*||g" 		{{file}}
+	sed -i "s|bin/AST_manager_listenBUFFER.pl:.*||g" 		{{file}}
+	sed -i "s|bin/AST_manager_listen.pl:.*||g" 				{{file}}
+	sed -i "s|bin/AST_manager_security_AMI2.pl:.*||g" 		{{file}}
+	# sed -i "s|bin/AST_manager_send.pl:.*||g" 				{{file}}
+	# sed -i "s|bin/AST_manager_sip_AMI2.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_output_update.pl:.*||g" 				{{file}}
+	sed -i "s|bin/AST_phone_update.pl:.*||g" 				{{file}}
+	sed -i "s|bin/AST_reset_mysql_vars.pl:.*||g" 			{{file}}
+	sed -i "s|bin/AST_send_URLbasic.pl:.*||g" 				{{file}}
+	sed -i "s|bin/AST_send_URL.pl:.*||g" 					{{file}}
+	sed -i "s|bin/AST_settings_container_SQL.pl:.*||g" 		{{file}}
+	sed -i "s|bin/AST_SWAMPauto_dial.pl:.*||g" 				{{file}}
+	sed -i "s|bin/AST_timecheck.pl:.*||g" 					{{file}}
+	sed -i "s|bin/AST_twoday_tables_control.pl:.*||g" 		{{file}}
+	# sed -i "s|bin/AST_update_AMI2.pl:.*||g" 				{{file}}
+	sed -i "s|bin/AST_update.pl:.*||g" 						{{file}}
+	sed -i "s|bin/AST_VDadapt.pl:.*||g" 					{{file}} # -- keep as perl: not interfacing with AMI
+	sed -i "s|bin/AST_VDauto_dial_FILL.pl:.*||g" 			{{file}} # -- keep as perl: not interfacing with AMI
+	sed -i "s|bin/AST_VDauto_dial.pl:.*||g" 				{{file}} # -- keep as perl: not interfacing with AMI
+	sed -i "s|bin/AST_VDcall_quotas.pl:.*||g" 				{{file}} # -- keep as perl: not interfacing with AMI
+	sed -i "s|bin/AST_VDhopper.pl:.*||g" 					{{file}} # -- keep as perl: not interfacing with AMI
+	sed -i "s|bin/AST_VDremote_agents.pl:.*||g" 			{{file}} # -- keep as perl: not interfacing with AMI
+	sed -i "s|bin/AST_VDweekly_agent_statuses_report.pl:.*||g" {{file}}
+	sed -i "s|bin/AST_vm_update.pl:.*||g" 					{{file}}
+	sed -i "s|bin/build_translation_www_files.pl:.*||g" 	{{file}}
+	sed -i "s|bin/.*_email.*.pl:.*||g" 						{{file}}
+	sed -i "s|bin/.*_export.*.pl:.*||g" 					{{file}}
+	# sed -i "s|bin/FastAGI_log.pl:.*||g" 					{{file}}
+	sed -i "s|bin/nanpa_.*||g" 								{{file}}
+	sed -i "s|bin/QC_.*||g" 								{{file}}
+	sed -i "s|bin/start_asterisk_boot.pl:.*||g" 			{{file}}
+	sed -i "s|bin/VICI_CSV_dump_call_log.pl:.*||g" 			{{file}}
+	sed -i "s|bin/VICIDIAL_.*||g" 							{{file}}
+	sed -i "s|bin/Vtiger_.*||g" 							{{file}}
+	sed -i '/^$/d' 											{{file}}
+
+
+_cleanup-sql file="./all-statements.sql":
+	#! /usr/bin/env bash
+	# sed -i "s|^.*.pl:||g" 																						{{file}}
+	sed -i 's|$vicidial_agent_log|vicidial_agent_log|g' 															{{file}}
+	sed -i 's|$vicidial_hopper|vicidial_hopper|g' 																	{{file}}
+	# $TEMPvicidial_sip_event_log = "vicidial_sip_event_log_$wday_now";
+	sed -i 's|$TEMPvicidial_sip_event_log|vicidial_sip_event_log_wday_now|g' 										{{file}}
+	# $convert_tz = "'$SQLtimezone','$SQLoffset_timezone'";
+	sed -i "s|\$convert_tz|'\$SQLtimezone','\$SQLoffset_timezone'|g" 												{{file}}
+	# $vicidial_log = 'vicidial_log FORCE INDEX (call_date) ';
+	sed -i "s|\$vicidial_log|vicidial_log FORCE INDEX (call_date) |g" 												{{file}}
+	# $vicidial_closer_log = 'vicidial_closer_log FORCE INDEX (call_date) ';
+	sed -i "s|\$vicidial_closer_log|vicidial_closer_log FORCE INDEX (call_date) |g" 								{{file}}
+	# $VLforce_index = 'FORCE INDEX (list_id) ';
+	sed -i "s|\$VLforce_index|FORCE INDEX (list_id) |g" 															{{file}}
+	# if ($anyone_callback_inactive_lists =~ /NO_ADD_TO_HOPPER/i)
+	# $vcNOanyone_callback_inactive_listsSQL = "and vicidial_callbacks.list_id NOT IN($inactive_lists)";
+	sed -i "s|\$vcNOanyone_callback_inactive_listsSQL|and vicidial_callbacks.list_id NOT IN(\$inactive_lists)|g" 	{{file}}
+	# $vlNOanyone_callback_inactive_listsSQL = "and vicidial_list.list_id NOT IN($inactive_lists)";
+	sed -i "s|\$vlNOanyone_callback_inactive_listsSQL|and vicidial_list.list_id NOT IN(\$inactive_lists)|g" 		{{file}}
+	# if ($anyone_callback_inactive_lists =~ /KEEP_IN_HOPPER/i)
+	# $KEEPanyone_callback_inactive_listsSQL = "and source!='C'";
+	sed -i "s|\$KEEPanyone_callback_inactive_listsSQL|and source!='C'|g" 											{{file}}
+	# $soxi_min = ($soxi_sec / 60);
+	# $soxi_min = sprintf("%.2f", $soxi_min);
+	# $lengthSQL = ",length_in_sec='$soxi_sec',length_in_min='$soxi_min'";
+	sed -i "s|\$lengthSQL|,length_in_sec='\$soxi_sec',length_in_min='\$soxi_min'|g" 								{{file}}
+	# $VDAD_SQL_time = "and event_time > '$TDSQLdate' and event_time < '$FDSQLdate'";
+	sed -i "s|\$VDAD_SQL_time|and event_time > '\$TDSQLdate' and event_time < '\$FDSQLdate'|g" 						{{file}}
+	# $VDCL_SQL_time = "and call_date > '$TDSQLdate' and call_date < '$FDSQLdate'";
+	sed -i "s|\$VDCL_SQL_time|and call_date > '\$TDSQLdate' and call_date < '\$FDSQLdate'|g" 						{{file}}
+	# $VDCL_SQL_time_where = "where call_date > '$TDSQLdate' and call_date < '$FDSQLdate'";
+	sed -i "s|\$VDCL_SQL_time_where|where call_date > '\$TDSQLdate' and call_date < '\$FDSQLdate'|g" 				{{file}}
+	# $VDP_SQL_time = "and parked_time > '$TDSQLdate' and parked_time < '$FDSQLdate'";
+	sed -i "s|\$VDP_SQL_time|and parked_time > '\$TDSQLdate' and parked_time < '\$FDSQLdate'|g" 					{{file}}
+	# $QM_SQL_time = "and time_id > $TDtarget and time_id < $FDtarget";
+	sed -i "s|\$QM_SQL_time|and time_id > '\$TDtarget' and time_id < '\$FDtarget'|g" 								{{file}}
+	# $QM_SQL_time_H = "and time_id > $TDtarget and time_id < $HDtarget";
+	sed -i "s|\$QM_SQL_time_H|and time_id > '\$TDtarget' and time_id < '\$HDtarget'|g" 								{{file}}
+	# $session_newSQL=",session_one_calls='1',session_one_today_calls='1'"
+	# $session_newSQL=",session_six_calls='1',session_six_today_calls='1'";
+	# $session_updateSQL=",session_one_calls=(session_one_calls + 1),session_one_today_calls=(session_one_today_calls + 1)";
+	# $session_updateSQL=",session_six_calls=(session_six_calls + 1),session_six_today_calls=(session_six_today_calls + 1)";
+	sed -i "s|\$session_newSQL|,session_six_calls='1',session_six_today_calls='1'|g" 								{{file}}
+	sed -i "s|\$session_updateSQL|,session_one_calls=(session_one_calls + 1),session_one_today_calls=(session_one_today_calls + 1)|g" 			{{file}}
+	sed -i "s|\$park_delete_sql|channel='\$channel' and extension='\$extension';|g" 															{{file}}
+	sed -i "s|\$trunk_delete_sql|server_ip='\$server_ip' and channel='\$db_trunk->{'channel'}' and extension='\$db_trunk->{'extension'}'|g" 	{{file}}
+	sed -i "s|\$client_delete_sql|server_ip='\$server_ip' and channel='\$db_client->{'channel'}' and extension='\$db_client->{'extension'}'|g" 	{{file}}
+	sed -i "s|\$client_insert_sql|('\$channel_ref->{'Channel'}','\$server_ip','\$extension','\$channel_ref->{'ApplicationData'}')|g" 			{{file}}
+	sed -i "s|\$trunk_insert_sql|('\$channel_ref->{'Channel'}','\$server_ip','\$extension','\$channel_ref->{'ApplicationData'}')|g" 			{{file}}
+	# $vl_commentsSQL  bin/FastAGI_log.pl:1110
+	sed -i "s|\$vl_commentsSQL|,comments='MANUAL'|g" 			{{file}}
+	# $SQL_status bin/FastAGI_log.pl:1622
+	# $VDCLSQL_update bin/FastAGI_log.pl:1675 $LOGuserSQL
+	# $day_updateSQL bin/FastAGI_log.pl:2384
+	# $cid_channels_recent bin/AST_update_AMI2.pl:1017
