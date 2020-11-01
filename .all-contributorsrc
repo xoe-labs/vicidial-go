@@ -7,10 +7,10 @@
   "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg)](#contributors)",
   "contributors": [
     {
-      "login": "moul",
-      "name": "Manfred Touron",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/94029?v=4",
-      "profile": "http://manfred.life",
+      "login": "blaggacao",
+      "name": "David Arnold",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7548295?v=4",
+      "profile": "https://github.com/blaggacao",
       "contributions": [
         "maintenance",
         "doc",
@@ -19,18 +19,21 @@
       ]
     },
     {
-      "login": "moul-bot",
-      "name": "moul-bot",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/41326314?v=4",
-      "profile": "https://manfred.life/moul-bot",
+      "login": "lina2358",
+      "name": "Lina Avendano",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/31328370?s=460&v=4",
+      "profile": "https://github.com/lina2358",
       "contributions": [
-        "maintenance"
+        "financial",
+        "business",
+        "ideas",
+        "projectManagement"
       ]
     }
   ],
-  "contributorsPerLine": 7,
-  "projectName": "golang-repo-template",
-  "projectOwner": "moul",
+  "contributorsPerLine": 14,
+  "projectName": "vicidial-go",
+  "projectOwner": "blaggacao",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true

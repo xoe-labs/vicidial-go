@@ -5,6 +5,7 @@ run:
     - "testing.go"
     - ".*\\.pb\\.go"
     - ".*\\.gen\\.go"
+    - ".*\\.sql\\.go"
 
 linters-settings:
   golint:
