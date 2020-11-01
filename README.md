@@ -1,50 +1,59 @@
-# golang-repo-template
+# vicidial-go
 
-:smile: golang-repo-template
+:smile: A (gradual) re-implementation of vicidial in golang
 
-[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/moul.io/golang-repo-template)
-[![License](https://img.shields.io/badge/license-Apache--2.0%20%2F%20MIT-%2397ca00.svg)](https://github.com/moul/golang-repo-template/blob/master/COPYRIGHT)
-[![GitHub release](https://img.shields.io/github/release/moul/golang-repo-template.svg)](https://github.com/moul/golang-repo-template/releases)
-[![Docker Metrics](https://images.microbadger.com/badges/image/moul/golang-repo-template.svg)](https://microbadger.com/images/moul/golang-repo-template)
-[![Made by Manfred Touron](https://img.shields.io/badge/made%20by-Manfred%20Touron-blue.svg?style=flat)](https://manfred.life/)
+[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/blaggacao/vicidial-go)
+[![License](https://img.shields.io/badge/license-MIT-%2397ca00.svg)](https://github.com/blaggacao/vicidial-go/blob/master/COPYRIGHT)
+[![GitHub release](https://img.shields.io/github/release/blaggacao/vicidial-go.svg)](https://github.com/blaggacao/vicidial-go/releases)
+[![Docker Metrics](https://images.microbadger.com/badges/image/blaggacao/vicidial-go.svg)](https://microbadger.com/images/blaggacao/vicidial-go)
+[![Devshell Dev Environment](https://img.shields.io/badge/nix-devshell-blue?logo=NixOS&labelColor=ccc)](github.com/numtide/devshell)
+[![Made by David Arnold](https://img.shields.io/badge/made%20by-David%20Arnold-blue.svg?style=flat)](https://github.com/blaggacao)
 
-[![Go](https://github.com/moul/golang-repo-template/workflows/Go/badge.svg)](https://github.com/moul/golang-repo-template/actions?query=workflow%3AGo)
-[![Release](https://github.com/moul/golang-repo-template/workflows/Release/badge.svg)](https://github.com/moul/golang-repo-template/actions?query=workflow%3ARelease)
-[![PR](https://github.com/moul/golang-repo-template/workflows/PR/badge.svg)](https://github.com/moul/golang-repo-template/actions?query=workflow%3APR)
-[![GolangCI](https://golangci.com/badges/github.com/moul/golang-repo-template.svg)](https://golangci.com/r/github.com/moul/golang-repo-template)
-[![codecov](https://codecov.io/gh/moul/golang-repo-template/branch/master/graph/badge.svg)](https://codecov.io/gh/moul/golang-repo-template)
+[![Go](https://github.com/blaggacao/vicidial-go/workflows/Go/badge.svg)](https://github.com/blaggacao/vicidial-go/actions?query=workflow%3AGo)
+[![Release](https://github.com/blaggacao/vicidial-go/workflows/Release/badge.svg)](https://github.com/blaggacao/vicidial-go/actions?query=workflow%3ARelease)
+[![PR](https://github.com/blaggacao/vicidial-go/workflows/PR/badge.svg)](https://github.com/blaggacao/vicidial-go/actions?query=workflow%3APR)
+[![codecov](https://codecov.io/gh/blaggacao/vicidial-go/branch/master/graph/badge.svg)](https://codecov.io/gh/blaggacao/vicidial-go)
 [![Go Report Card](https://goreportcard.com/badge/moul.io/golang-repo-template)](https://goreportcard.com/report/moul.io/golang-repo-template)
-[![CodeFactor](https://www.codefactor.io/repository/github/moul/golang-repo-template/badge)](https://www.codefactor.io/repository/github/moul/golang-repo-template)
+<!--
+[![CodeFactor](https://www.codefactor.io/repository/github/blaggacao/vicidial-go/badge)](https://www.codefactor.io/repository/github/blaggacao/vicidial-go)
+-->
 
 ## Usage
 
 [embedmd]:# (.tmp/usage.txt console)
 ```console
-foo@bar:~$ golang-repo-template hello world
-            _                                                   _                      _        _
- __ _  ___ | | __ _  _ _   __ _  ___  _ _  ___  _ __  ___  ___ | |_  ___  _ __   _ __ | | __ _ | |_  ___
-/ _` |/ _ \| |/ _` || ' \ / _` ||___|| '_|/ -_)| '_ \/ _ \|___||  _|/ -_)| '  \ | '_ \| |/ _` ||  _|/ -_)
-\__, |\___/|_|\__,_||_||_|\__, |     |_|  \___|| .__/\___/      \__|\___||_|_|_|| .__/|_|\__,_| \__|\___|
-|___/                     |___/                |_|                              |_|
-12 CPUs, /home/moul/go/bin/golang-repo-template, fwrz, go1.15.2
-args ["golang-repo-template","hello","world"]
+foo@bar:~$$ vicigo event-router
+
+
+
+foo@bar:~$$ vicigo adaptive-dialer
 ```
 
 ## Install
 
-### Using go
-
-```sh
-go get moul.io/golang-repo-template
-```
-
 ### Releases
 
-See https://github.com/moul/golang-repo-template/releases
+See https://github.com/blaggacao/vicidial-go/releases
 
 ## Contribute
 
-![Contribute <3](https://raw.githubusercontent.com/moul/moul/master/contribute.gif)
+[![Devshell Dev Environment](https://img.shields.io/badge/nix-devshell-blue?logo=NixOS&labelColor=ccc)](github.com/numtide/devshell)
+
+We use _devshell_ an extension to `nix-shell` to provide you (on linux/mac \*) with a convenient, reproducible developer environment.
+First time running `nix-shell` will take some time, subsequent runs are instantaneous.
+
+\* windows is currently not supported: you have to build the environment yourself. The most important binaries are: `go`, `just` and `sqlc`.
+
+```console
+$ curl -L https://nixos.org/nix/install | sh
+
+$ gh repo fork blaggacao/vicidial-go
+
+$ nix-shell
+
+$ menu
+$ just-menu
+```
 
 I really welcome contributions.
 Your input is the most precious material.
@@ -52,7 +61,7 @@ I'm well aware of that and I thank you in advance.
 Everyone is encouraged to look at what they can do on their own scale;
 no effort is too small.
 
-Everything on contribution is sum up here: [CONTRIBUTING.md](./CONTRIBUTING.md)
+Everything on contribution is summed up here: [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ### Contributors ✨
 
@@ -67,13 +76,14 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="http://manfred.life"><img src="https://avatars1.githubusercontent.com/u/94029?v=4" width="100px;" alt=""/><br /><sub><b>Manfred Touron</b></sub></a><br /><a href="#maintenance-moul" title="Maintenance">🚧</a> <a href="https://github.com/moul/golang-repo-template/commits?author=moul" title="Documentation">📖</a> <a href="https://github.com/moul/golang-repo-template/commits?author=moul" title="Tests">⚠️</a> <a href="https://github.com/moul/golang-repo-template/commits?author=moul" title="Code">💻</a></td>
-    <td align="center"><a href="https://manfred.life/moul-bot"><img src="https://avatars1.githubusercontent.com/u/41326314?v=4" width="100px;" alt=""/><br /><sub><b>moul-bot</b></sub></a><br /><a href="#maintenance-moul-bot" title="Maintenance">🚧</a></td>
+    <td align="center"><a href="https://github.com/blaggacao"><img src="https://avatars2.githubusercontent.com/u/7548295?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Arnold</b></sub></a><br /><a href="#maintenance-blaggacao" title="Maintenance">🚧</a> <a href="https://github.com/blaggacao/vicidial-go/commits?author=blaggacao" title="Documentation">📖</a> <a href="https://github.com/blaggacao/vicidial-go/commits?author=blaggacao" title="Tests">⚠️</a> <a href="https://github.com/blaggacao/vicidial-go/commits?author=blaggacao" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/lina2358"><img src="https://avatars2.githubusercontent.com/u/31328370?s=460&v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lina Avendano</b></sub></a><br /><a href="#financial-lina2358" title="Financial">💵</a> <a href="#business-lina2358" title="Business development">💼</a> <a href="#ideas-lina2358" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-lina2358" title="Project Management">📆</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors)
@@ -81,15 +91,14 @@ specification. Contributions of any kind welcome!
 
 ### Stargazers over time
 
-[![Stargazers over time](https://starchart.cc/moul/golang-repo-template.svg)](https://starchart.cc/moul/golang-repo-template)
+[![Stargazers over time](https://starchart.cc/blaggacao/vicidial-go.svg)](https://starchart.cc/blaggacao/vicidial-go)
 
 ## License
 
-© 2020 [Manfred Touron](https://manfred.life)
+© 2020 David Arnold
 
-Licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
-([`LICENSE-APACHE`](LICENSE-APACHE)) or the [MIT license](https://opensource.org/licenses/MIT)
-([`LICENSE-MIT`](LICENSE-MIT)), at your option.
+Licensed under the the [MIT license](https://opensource.org/licenses/MIT)
+([`LICENSE`](LICENSE)).
 See the [`COPYRIGHT`](COPYRIGHT) file for more details.
 
-`SPDX-License-Identifier: (Apache-2.0 OR MIT)`
+`SPDX-License-Identifier: MIT`

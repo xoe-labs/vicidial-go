@@ -1,3 +1,6 @@
+# Managed by in the environment by devshell
+.pre-commit-config.yaml
+
 go-test.json
 
 # Temporary files
@@ -10,14 +13,7 @@ go-build.log
 go-install.log
 go-test.json
 
-# Vendors
-package-lock.json
-node_modules/
-vendor/
-
 # Binaries for programs and plugins
-dist/
-gin-bin
 *.exe
 *.exe~
 *.dll

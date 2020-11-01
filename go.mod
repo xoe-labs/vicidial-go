@@ -1,13 +1,10 @@
-module moul.io/golang-repo-template
+module github.com/blaggacao/vicidial-go
 
-go 1.13
+go 1.14
 
 require (
-	github.com/tailscale/depaware v0.0.0-20201003033024-5d95aab075be
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/stretchr/testify v1.6.1 // indirect
 	go.uber.org/goleak v1.1.10
-	golang.org/x/tools v0.0.0-20201005185003-576e169c3de7 // indirect
-	moul.io/motd v1.0.0
-	moul.io/srand v1.6.0
-	moul.io/u v1.18.0
-	moul.io/zapconfig v1.2.0
+	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 )
