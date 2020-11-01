@@ -1,0 +1,136 @@
+packages = [
+#   # markdown liniting & tooling
+  "alex",
+  "mdspell",
+  "remark",
+  "markdownlint",
+  "embedmd",
+  "shoulders",
+
+  # general unix tools used in the environment
+  "gnused",
+  "coreutils",
+  "perl", # advanced regex "sed"
+  "bat", # beat cat
+  "fd", # faster than find
+  "fzf", # fuzzy find
+  "ripgrep", # rest in peace grep!
+
+  # language tooling
+  "go",
+  "golangci-lint",
+  "depaware",
+  "goimports",
+  "goreleaser",
+
+  # git & git related
+  "git",
+  "gitAndTools.delta", # better cli diffs
+  "all-contributors-cli",
+
+  # formatters & linters
+  "shfmt", # format shell files
+
+  # container & workflow tooling
+  "dive",
+  "skaffold",
+  "stern"
+]
+
+[[commands]]
+help = "see the current folder task runner's recipes"
+name = "just-menu"
+command = "just --list"
+
+# Utilities
+[[commands]]
+help = "elegant git branch lifecycle management"
+name = "git-town"
+category =  "utilities"
+package = "git-town"
+
+[[commands]]
+help = "a slick task runner"
+name = "just"
+category =  "utilities"
+package = "just"
+
+[[commands]]
+help = "commit message formatting (cz utility)"
+name = "commit"
+command = "cz commit"
+category =  "utilities"
+package = "commitizen" # overlay
+
+[[commands]]
+help = "generate idiomatic go from sql"
+name = "sqlc"
+category =  "utilities"
+package = "sqlc" # overlay
+
+[[commands]]
+help = "run CI locally"
+name = "drone-cli"
+category =  "utilities"
+package = "drone-cli"
+
+# Kubernetes Utilities
+[[commands]]
+help = "hermetically isolate kubecontext"
+name = "kubeprompt"
+category =  "kubernetes utilities"
+package = "kubeprompt"
+
+[[commands]]
+help = "official kubernetes cli"
+name = "kubectl"
+category =  "kubernetes utilities"
+package = "kubectl"
+
+[[commands]]
+help = "official kubernetes config management tool"
+name = "kustomize"
+category =  "kubernetes utilities"
+package = "kustomize"
+
+[[commands]]
+help = "deep cluster insights"
+name = "k9s"
+category =  "kubernetes utilities"
+package = "k9s"
+
+[[commands]]
+help = "manage local dev cluster"
+name = "k3d"
+category =  "kubernetes utilities"
+package = "kube3d"
+
+
+[env]
+# common kube settings
+KUBECTL_EXTERNAL_DIFF = "delta"
+
+[bash]
+extra = """
+repo_kubeconfig="$HOME/.kube/github.com/blaggacao/vicidial-go/k3d-dev"
+export KUBECONFIG="$KUBECONFIG:$HOME/.kube/config:$repo_kubeconfig";
+# git town settings
+git config git-town.main-branch-name master
+# git delta settings
+git config core.pager delta
+git config interactive.diffFilter "delta --color-only"
+git config diff.colorMoved default
+git config delta.navigate true
+git config delta.side-by-side true
+git config delta.line-numbers true
+git config delta.decorations true
+git config delta.whitespace-error-style "22 reverse"
+# zsh prompt configuration
+export IN_WHICH_NIX_SHELL="$(basename $(pwd))"
+# see: https://github.com/numtide/devshell/issues/25
+if [[ "$SHELL" == "/usr/bin/zsh" ]] || [[ "$SHELL" =~ .*buildShellShim.zsh$ ]]; then
+  export KUBEPROMPT_FORMAT='{{if .Enabled}}%B%F{blue}%{⎈ %2G%}%f➜%{ %}%F{yellow}{{.Ctx}}%f|%F{magenta}{{.Ns}}%f%b{{end}}'
+  export RPROMPT='$(kubeprompt -f default)'
+fi
+"""
+

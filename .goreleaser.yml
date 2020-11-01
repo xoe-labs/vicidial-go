@@ -49,25 +49,14 @@ archives:
       goos: windows
       format: zip
     wrap_in_directory: true
-brews:
-  -
-    name: golang-repo-template
-#    github:
-#      owner: moul
-#      name: homebrew-moul
-    commit_author:
-      name: moul-bot
-      email: "bot@moul.io"
-    homepage: https://github.com/moul/golang-repo-template
-    description: "golang-repo-template"
 nfpms:
   -
     file_name_template: '{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-    homepage:  https://github.com/moul/golang-repo-template
-    description: "golang-repo-template"
-    maintainer: "Manfred Touron <https://manfred.life>"
-    license: "Apache-2.0 OR MIT"
-    vendor: moul
+    homepage:  https://github.com/blaggacao/vicidial-go
+    description: "vicidial-go"
+    maintainer: "David Arnold <dar@xoe.solutions>"
+    license: "MIT"
+    vendor: blaggacao
     formats:
       - deb
       - rpm
