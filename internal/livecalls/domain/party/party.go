@@ -11,6 +11,7 @@ import (
 )
 
 //go:generate go run github.com/xoe-labs/go-generators/ddd-domain-gen -t Party
+//go:generate go run github.com/phelmkamp/metatag
 
 type PartyType struct{ s string }
 
@@ -36,8 +37,8 @@ func NewPartyTypeFromString(partyType string) (PartyType, error) {
 }
 
 type Party struct {
-	uuid         string    `ddd:"required'missing party UUID'"`
-	pType        PartyType `ddd:"required'missing party type'"`
-	name         string    `ddd:"required'missing party name'"`
+	uuid         string    `ddd:"required'missing party UUID'" meta:"equal"`
+	pType        PartyType `ddd:"required'missing party type'" meta:"stringer"`
+	name         string    `ddd:"required'missing party name'" meta:"stringer"`
 	endpointUUID string    `ddd:"required'missing endpoint UUID'"`
 }

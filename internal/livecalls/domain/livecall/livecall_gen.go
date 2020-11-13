@@ -11,15 +11,15 @@ import (
 // Generators ...
 
 // New returns a guaranteed-to-be-valid Livecall or an error
-func New(uuid string, agentOrService party.Party, lead party.Party, startTime time.Time) (*Livecall, error) {
+func New(uuid string, lead party.Party, agentOrService party.Party, startTime time.Time) (*Livecall, error) {
 	if reflect.ValueOf(uuid).IsZero() {
 		return nil, errors.New("missing party UUID")
 	}
-	if reflect.ValueOf(agentOrService).IsZero() {
-		return nil, errors.New("missing agent or service")
-	}
 	if reflect.ValueOf(lead).IsZero() {
 		return nil, errors.New("missing lead")
+	}
+	if reflect.ValueOf(agentOrService).IsZero() {
+		return nil, errors.New("missing agent or service")
 	}
 	if reflect.ValueOf(startTime).IsZero() {
 		return nil, errors.New("missing start time")
@@ -34,8 +34,8 @@ func New(uuid string, agentOrService party.Party, lead party.Party, startTime ti
 }
 
 // MustNew returns a guaranteed-to-be-valid Livecall or panics
-func MustNew(uuid string, agentOrService party.Party, lead party.Party, startTime time.Time) *Livecall {
-	l, err := New(uuid, agentOrService, lead, startTime)
+func MustNew(uuid string, lead party.Party, agentOrService party.Party, startTime time.Time) *Livecall {
+	l, err := New(uuid, lead, agentOrService, startTime)
 	if err != nil {
 		panic(err)
 	}
@@ -49,8 +49,8 @@ func MustNew(uuid string, agentOrService party.Party, lead party.Party, startTim
 //
 // Important: DO NEVER USE THIS METHOD EXCEPT FROM THE REPOSITORY
 // Reason: This method initializes private state, so you could corrupt the domain.
-func UnmarshalFromRepository(uuid string, agentOrService party.Party, lead party.Party, startTime time.Time, endTime time.Time) *Livecall {
-	l := MustNew(uuid, agentOrService, lead, startTime)
+func UnmarshalFromRepository(uuid string, lead party.Party, agentOrService party.Party, startTime time.Time, endTime time.Time) *Livecall {
+	l := MustNew(uuid, lead, agentOrService, startTime)
 	l.endTime = endTime
 	return l
 }
