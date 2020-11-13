@@ -1,6 +1,9 @@
 // Copyright © 2020 David Arnold <dar@xoe.solutions>
 // SPDX-License-Identifier: MIT
 
+//go:generate go run github.com/xoe-labs/go-generators/ddd-domain-gen -t Livecall
+//go:generate go run github.com/phelmkamp/metatag
+
 package livecall
 
 import (
@@ -11,9 +14,6 @@ import (
 	"github.com/blaggacao/vicidial-go/internal/livecalls/domain/party"
 	// cErrors "github.com/blaggacao/vicidial-go/internal/common/errors"
 )
-
-//go:generate go run github.com/xoe-labs/go-generators/ddd-domain-gen -t Livecall
-//go:generate go run github.com/phelmkamp/metatag
 
 // A Livecall starts when an audio connection between two parties is established
 // and ends when the adio connection is terminated.

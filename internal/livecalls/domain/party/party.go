@@ -1,11 +1,18 @@
 // Copyright © 2020 David Arnold <dar@xoe.solutions>
 // SPDX-License-Identifier: MIT
 
-package party
-
 //go:generate go run github.com/xoe-labs/go-generators/ddd-domain-gen -t Party
 //go:generate go run github.com/phelmkamp/metatag
 //go:generate go run github.com/phelmkamp/magnum
+
+package party
+
+import (
+
+	// "github.com/pkg/errors"
+
+	// cErrors "github.com/blaggacao/vicidial-go/internal/common/errors"
+)
 
 type PartyType struct {
 	name     string `enum:"local,remote"`
