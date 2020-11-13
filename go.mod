@@ -17,11 +17,11 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/stretchr/testify v1.6.1 // indirect
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2
-	github.com/xoe-labs/go-generators/ddd-domain-gen v0.0.0-20201112215918-890e1137855e // indirect
+	github.com/xoe-labs/go-generators/ddd-domain-gen v0.0.0-20201113145543-666e9681d612 // indirect
 	go.uber.org/goleak v1.1.10
-	golang.org/x/sys v0.0.0-20201112073958-5cba982894dd // indirect
+	golang.org/x/sys v0.0.0-20201113135734-0a15ea8d9b02 // indirect
 	golang.org/x/text v0.3.4 // indirect
-	golang.org/x/tools v0.0.0-20201112185108-eeaa07dd7696 // indirect
+	golang.org/x/tools v0.0.0-20201113164040-559c4acc06b6 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 )

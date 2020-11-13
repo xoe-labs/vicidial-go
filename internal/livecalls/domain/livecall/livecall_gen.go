@@ -4,35 +4,37 @@ package livecall
 import (
 	"errors"
 	party "github.com/blaggacao/vicidial-go/internal/livecalls/domain/party"
+	"reflect"
 	"time"
 )
 
 // Generators ...
 
 // New returns a guaranteed-to-be-valid Livecall or an error
-func New(uuid *string, agentOrService *party.Party, lead *party.Party, startTime *time.Time) (*Livecall, error) {
-	if uuid == nil {
+func New(uuid string, agentOrService party.Party, lead party.Party, startTime time.Time) (*Livecall, error) {
+	if reflect.ValueOf(uuid).IsZero() {
 		return nil, errors.New("missing party UUID")
 	}
-	if agentOrService == nil {
+	if reflect.ValueOf(agentOrService).IsZero() {
 		return nil, errors.New("missing agent or service")
 	}
-	if lead == nil {
+	if reflect.ValueOf(lead).IsZero() {
 		return nil, errors.New("missing lead")
 	}
-	if startTime == nil {
+	if reflect.ValueOf(startTime).IsZero() {
 		return nil, errors.New("missing start time")
 	}
-	return &Livecall{
+	l := &Livecall{
 		agentOrService: agentOrService,
 		lead:           lead,
 		startTime:      startTime,
 		uuid:           uuid,
-	}, nil
+	}
+	return l, nil
 }
 
 // MustNew returns a guaranteed-to-be-valid Livecall or panics
-func MustNew(uuid *string, agentOrService *party.Party, lead *party.Party, startTime *time.Time) *Livecall {
+func MustNew(uuid string, agentOrService party.Party, lead party.Party, startTime time.Time) *Livecall {
 	l, err := New(uuid, agentOrService, lead, startTime)
 	if err != nil {
 		panic(err)
@@ -47,35 +49,8 @@ func MustNew(uuid *string, agentOrService *party.Party, lead *party.Party, start
 //
 // Important: DO NEVER USE THIS METHOD EXCEPT FROM THE REPOSITORY
 // Reason: This method initializes private state, so you could corrupt the domain.
-func UnmarshalFromRepository(uuid *string, agentOrService *party.Party, lead *party.Party, startTime *time.Time, endTime *time.Time) *Livecall {
+func UnmarshalFromRepository(uuid string, agentOrService party.Party, lead party.Party, startTime time.Time, endTime time.Time) *Livecall {
 	l := MustNew(uuid, agentOrService, lead, startTime)
 	l.endTime = endTime
 	return l
-}
-
-// Getters ...
-
-// Uuid returns uuid value
-func (l *Livecall) Uuid() *string {
-	return l.uuid
-}
-
-// AgentOrService returns agentOrService value
-func (l *Livecall) AgentOrService() *party.Party {
-	return l.agentOrService
-}
-
-// Lead returns lead value
-func (l *Livecall) Lead() *party.Party {
-	return l.lead
-}
-
-// StartTime returns startTime value
-func (l *Livecall) StartTime() *time.Time {
-	return l.startTime
-}
-
-// EndTime returns endTime value
-func (l *Livecall) EndTime() *time.Time {
-	return l.endTime
 }

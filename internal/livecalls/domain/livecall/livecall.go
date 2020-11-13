@@ -18,10 +18,10 @@ import (
 // A Livecall starts when an audio connection between two parties is established
 // and ends when the adio connection is terminated.
 type Livecall struct {
-	uuid           *string      `gen:"getter" ddd:"required'missing party UUID'"`
-	agentOrService *party.Party `gen:"getter" ddd:"required'missing agent or service'"`
-	lead           *party.Party `gen:"getter" ddd:"required'missing lead'"`
-	startTime      *time.Time   `gen:"getter" ddd:"required'missing start time'"`
-	endTime        *time.Time   `gen:"getter" ddd:"private"`
+	uuid           string      `ddd:"required'missing party UUID'"`
+	agentOrService party.Party `ddd:"required'missing agent or service'"`
+	lead           party.Party `ddd:"required'missing lead'"`
+	startTime      time.Time   `ddd:"required'missing start time'"`
+	endTime        time.Time   `ddd:"private"`
 }
 

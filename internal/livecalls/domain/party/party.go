@@ -36,8 +36,8 @@ func NewPartyTypeFromString(partyType string) (PartyType, error) {
 }
 
 type Party struct {
-	uuid         *string    `gen:"getter" ddd:"required'missing party UUID'"`
-	pType        *PartyType `gen:"getter" ddd:"required'missing party type'"`
-	name         *string    `gen:"getter" ddd:"required'missing party name'"`
-	endpointUUID *string    `gen:"getter" ddd:"required'missing endpoint UUID'"`
+	uuid         string    `ddd:"required'missing party UUID'"`
+	pType        PartyType `ddd:"required'missing party type'"`
+	name         string    `ddd:"required'missing party name'"`
+	endpointUUID string    `ddd:"required'missing endpoint UUID'"`
 }
