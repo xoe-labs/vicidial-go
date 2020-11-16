@@ -8,19 +8,39 @@ package livecall
 
 import (
 	"time"
+	"fmt"
 
 	// "github.com/pkg/errors"
 
-	"github.com/blaggacao/vicidial-go/internal/livecalls/domain/party"
+	"github.com/blaggacao/vicidial-go/internal/common/party"
 	// cErrors "github.com/blaggacao/vicidial-go/internal/common/errors"
 )
 
-// A Livecall starts when an audio connection between two parties is established
-// and ends when the adio connection is terminated.
+type meta struct {
+	leadUUID     string
+	scheduleUUID string
+}
+
+// A Livecall represents a call either dialed or received
 type Livecall struct {
-	uuid           string      `ddd:"required'missing party UUID'" meta:"equal"`
-	lead           party.Party `ddd:"required'missing lead'" meta:"getter;stringer"`
-	agentOrService party.Party `ddd:"required'missing agent or service'" meta:"getter;stringer"`
-	startTime      time.Time   `ddd:"required'missing start time'"`
-	endTime        time.Time   `ddd:"private"`
+	meta meta
+
+	uuid                  string             `ddd:"required'missing UUID'" meta:"equal"`
+	lead                  party.RemoteParty  `ddd:"required'missing lead'" meta:"getter;stringer"`
+	agentOrService        party.LocalParty   `meta:"getter;stringer"`
+	agentOrServiceHistory []party.LocalParty ``
+	startTime             time.Time          ``
+	endTime               time.Time          `ddd:"private"`
+	routeUUID             string             `` // ask for routing of lead-only livecall
+
+	resultCodes []string `ddd:"required'missing result codes'"`
+	resultCode  string   `ddd:"private"`
+	recording   string
+}
+
+func (l Livecall) validate() error {
+	if (l.agentOrService != party.LocalParty{}) && (l.routeUUID != "") {
+		return fmt.Errorf("livecall has both, local party and route, set")
+	}
+	return nil
 }
