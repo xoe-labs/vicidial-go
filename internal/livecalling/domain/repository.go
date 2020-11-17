@@ -7,6 +7,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/satori/go.uuid"
+
 	l "./livecall"
 )
 
@@ -25,14 +27,12 @@ func (e NotFoundError) Error() string {
 // If a requested uuid is not found, it is expected to return
 // NotFoundError to allow the domain to handle it.
 type Repository interface {
-	AddLivecall(ctx context.Context, lc *l.Livecall) error
+	// Add adds a livecall to the repository
+	Add(ctx context.Context, l *l.Livecall) error
 
-	GetLivecall(ctx context.Context, livecallUUID string, user User) (*l.Livecall, error)
+	// Get gets a livecall from the repository by its uuid
+	Get(ctx context.Context, uuid uuid.UUID) (*l.Livecall, error)
 
-	UpdateLivecall(
-		ctx context.Context,
-		livecallUUID string,
-		user User,
-		updateFn func(ctx context.Context, lc *l.Livecall) (*l.Livecall, error),
-	) error
+	// Update updates a livecall in the repository by its uuid through an update function
+	Update(ctx context.Context, uuid uuid.UUID, updateFn func(l *l.Livecall) error) error
 }

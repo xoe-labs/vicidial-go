@@ -8,6 +8,12 @@ package scheduler
 import (
 	"fmt"
 	"github.com/pkg/errors"
+
+	cerrors "github.com/xoe-labs/vicidial-go/internal/common/errors"
+)
+
+const (
+	ErrAgentAlreadyAssigned = cerrors.CommonError("ErrAgentAlreadyAssigned")
 )
 
 // Schedulers wraps a slice of schedulers

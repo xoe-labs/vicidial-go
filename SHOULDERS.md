@@ -257,6 +257,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/ryanuber/columnize](https://godoc.org/github.com/ryanuber/columnize)
 
+* [github.com/satori/go.uuid](https://godoc.org/github.com/satori/go.uuid)
+
 * [github.com/sean-/seed](https://godoc.org/github.com/sean-/seed)
 
 * [github.com/shurcooL/sanitized_anchor_name](https://godoc.org/github.com/shurcooL/sanitized_anchor_name)
