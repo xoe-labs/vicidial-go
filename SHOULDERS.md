@@ -19,6 +19,8 @@ Thank you to the following **GIANTS**:
 
 * [dmitri.shuralyov.com/gpu/mtl](https://godoc.org/dmitri.shuralyov.com/gpu/mtl)
 
+* [github.com/Boostport/address](https://godoc.org/github.com/Boostport/address)
+
 * [github.com/BurntSushi/toml](https://godoc.org/github.com/BurntSushi/toml)
 
 * [github.com/BurntSushi/xgb](https://godoc.org/github.com/BurntSushi/xgb)
@@ -56,6 +58,8 @@ Thank you to the following **GIANTS**:
 * [github.com/coreos/pkg](https://godoc.org/github.com/coreos/pkg)
 
 * [github.com/cpuguy83/go-md2man/v2](https://godoc.org/github.com/cpuguy83/go-md2man/v2)
+
+* [github.com/creack/pty](https://godoc.org/github.com/creack/pty)
 
 * [github.com/dave/jennifer](https://godoc.org/github.com/dave/jennifer)
 
@@ -211,6 +215,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/nxadm/tail](https://godoc.org/github.com/nxadm/tail)
 
+* [github.com/nyaruka/phonenumbers](https://godoc.org/github.com/nyaruka/phonenumbers)
+
 * [github.com/oklog/ulid](https://godoc.org/github.com/oklog/ulid)
 
 * [github.com/onsi/ginkgo](https://godoc.org/github.com/onsi/ginkgo)
@@ -284,6 +290,10 @@ Thank you to the following **GIANTS**:
 * [github.com/subosito/gotenv](https://godoc.org/github.com/subosito/gotenv)
 
 * [github.com/tmc/grpc-websocket-proxy](https://godoc.org/github.com/tmc/grpc-websocket-proxy)
+
+* [github.com/unchartedsoftware/witch](https://godoc.org/github.com/unchartedsoftware/witch)
+
+* [github.com/urfave/cli](https://godoc.org/github.com/urfave/cli)
 
 * [github.com/x-cray/logrus-prefixed-formatter](https://godoc.org/github.com/x-cray/logrus-prefixed-formatter)
 
