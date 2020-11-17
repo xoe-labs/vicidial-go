@@ -34,7 +34,9 @@ type Livecall struct {
 	resultSentinel string `ddd:"private" meta:"setter"`
 	recording      string
 }
-
+// IsResolved returns true if the livecall has a local party
+// local party can come from resolving a route or can be preexisting ("overridden")
 func (l *Livecall) IsResolved() bool {
 	return l.localParty != party.LocalParty{}
 }
+
