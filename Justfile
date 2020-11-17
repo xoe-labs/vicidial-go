@@ -148,7 +148,7 @@ k3sCtx := "k3d-" + clusterName
 localIngressHttpPort := "80"
 localIngressHttpsPort := "443"
 localApiServerProxyPort := "8081"
-repoUri := "github.com/blaggacao/vicidial-go"
+repoUri := "github.com/xoe-labs/vicidial-go"
 
 # activate kubectl context
 k3d-activate:

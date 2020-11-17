@@ -5,7 +5,7 @@ package livecall
 
 import (
 	"fmt"
-	"github.com/blaggacao/vicidial-go/internal/livecalls/domain/party"
+	"github.com/xoe-labs/vicidial-go/internal/common/party"
 )
 
 // Equal answers whether v is equivalent to l.
@@ -22,16 +22,21 @@ func (l Livecall) Equal(v interface{}) bool {
 }
 
 // Lead returns the value of lead.
-func (l Livecall) Lead() party.Party {
+func (l Livecall) Lead() party.RemoteParty {
 	return l.lead
 }
 
 // String returns the "native" format of Livecall. Implements the fmt.Stringer interface.
 func (l Livecall) String() string {
-	return fmt.Sprintf("%v %v", l.lead, l.agentOrService)
+	return fmt.Sprintf("%v %v", l.lead, l.localParty)
 }
 
-// AgentOrService returns the value of agentOrService.
-func (l Livecall) AgentOrService() party.Party {
-	return l.agentOrService
+// LocalParty returns the value of localParty.
+func (l Livecall) LocalParty() party.LocalParty {
+	return l.localParty
+}
+
+// SetResultSentinel sets the given value as resultSentinel.
+func (l *Livecall) SetResultSentinel(s string) {
+	l.resultSentinel = s
 }

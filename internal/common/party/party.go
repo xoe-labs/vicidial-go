@@ -12,7 +12,7 @@ import (
 
 // "github.com/pkg/errors"
 
-// cErrors "github.com/blaggacao/vicidial-go/internal/common/errors"
+// cErrors "github.com/xoe-labs/vicidial-go/internal/common/errors"
 )
 
 type LocalPartyType struct {

@@ -6,53 +6,53 @@ import (
 	"fmt"
 )
 
-// PartyTypes returns all possible PartyTypes.
-func PartyTypes() []PartyType {
-	return []PartyType{Local(), Remote()}
+// LocalPartyTypes returns all possible LocalPartyTypes.
+func LocalPartyTypes() []LocalPartyType {
+	return []LocalPartyType{Agent(), Service()}
 }
 
-// NewPartyType returns the PartyType for the given name.
-func NewPartyType(name string) (PartyType, error) {
+// NewLocalPartyType returns the LocalPartyType for the given name.
+func NewLocalPartyType(name string) (LocalPartyType, error) {
 	switch name {
-	case "local":
-		return Local(), nil
-	case "remote":
-		return Remote(), nil
+	case "agent":
+		return Agent(), nil
+	case "service":
+		return Service(), nil
 	default:
-		return PartyType{}, fmt.Errorf("unknown name: %s", name)
+		return LocalPartyType{}, fmt.Errorf("unknown name: %s", name)
 	}
 }
 
-// Local returns the "local" PartyType.
-func Local() PartyType {
-	return PartyType{
-		name: "local",
+// Agent returns the "agent" LocalPartyType.
+func Agent() LocalPartyType {
+	return LocalPartyType{
+		name: "agent",
 	}
 }
 
-// Remote returns the "remote" PartyType.
-func Remote() PartyType {
-	return PartyType{
-		name: "remote",
+// Service returns the "service" LocalPartyType.
+func Service() LocalPartyType {
+	return LocalPartyType{
+		name: "service",
 	}
 }
 
-// String returns the PartyType's name.
-func (p PartyType) String() string {
-	return p.name
+// String returns the LocalPartyType's name.
+func (l LocalPartyType) String() string {
+	return l.name
 }
 
 // MarshalText encodes the receiver into textual form.
-func (p PartyType) MarshalText() (text []byte, err error) {
-	return []byte(p.String()), nil
+func (l LocalPartyType) MarshalText() (text []byte, err error) {
+	return []byte(l.String()), nil
 }
 
 // UnmarshalText decodes the receiver from its textual form.
-func (p *PartyType) UnmarshalText(text []byte) error {
-	v, err := NewPartyType(string(text))
+func (l *LocalPartyType) UnmarshalText(text []byte) error {
+	v, err := NewLocalPartyType(string(text))
 	if err != nil {
 		return err
 	}
-	*p = v
+	*l = v
 	return nil
 }

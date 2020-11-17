@@ -138,7 +138,7 @@ KUBECTL_EXTERNAL_DIFF = "delta"
 
 [bash]
 extra = """
-repo_kubeconfig="$HOME/.kube/github.com/blaggacao/vicidial-go/k3d-dev"
+repo_kubeconfig="$HOME/.kube/github.com/xoe-labs/vicidial-go/k3d-dev"
 export KUBECONFIG="$KUBECONFIG:$HOME/.kube/config:$repo_kubeconfig";
 # git town settings
 git config git-town.main-branch-name master

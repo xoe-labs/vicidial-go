@@ -4,7 +4,7 @@
 //go:generate go run github.com/xoe-labs/go-generators/ddd-domain-gen -t Agent
 //go:generate go run github.com/phelmkamp/metatag
 
-package scheduler
+package agent
 
 // Agent represents an agent assigned to a scheduler
 // it does not know anything about the agent's state (eg. availability)

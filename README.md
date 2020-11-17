@@ -3,15 +3,15 @@
 :smile: A (gradual) re-implementation of vicidial in golang
 
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/blaggacao/vicidial-go)
-[![License](https://img.shields.io/badge/license-MIT-%2397ca00.svg)](https://github.com/blaggacao/vicidial-go/blob/master/COPYRIGHT)
-[![GitHub release](https://img.shields.io/github/release/blaggacao/vicidial-go.svg)](https://github.com/blaggacao/vicidial-go/releases)
+[![License](https://img.shields.io/badge/license-MIT-%2397ca00.svg)](https://github.com/xoe-labs/vicidial-go/blob/master/COPYRIGHT)
+[![GitHub release](https://img.shields.io/github/release/blaggacao/vicidial-go.svg)](https://github.com/xoe-labs/vicidial-go/releases)
 [![Docker Metrics](https://images.microbadger.com/badges/image/blaggacao/vicidial-go.svg)](https://microbadger.com/images/blaggacao/vicidial-go)
 [![Devshell Dev Environment](https://img.shields.io/badge/nix-devshell-blue?logo=NixOS&labelColor=ccc)](github.com/numtide/devshell)
 [![Made by David Arnold](https://img.shields.io/badge/made%20by-David%20Arnold-blue.svg?style=flat)](https://github.com/blaggacao)
 
-[![Go](https://github.com/blaggacao/vicidial-go/workflows/Go/badge.svg)](https://github.com/blaggacao/vicidial-go/actions?query=workflow%3AGo)
-[![Release](https://github.com/blaggacao/vicidial-go/workflows/Release/badge.svg)](https://github.com/blaggacao/vicidial-go/actions?query=workflow%3ARelease)
-[![PR](https://github.com/blaggacao/vicidial-go/workflows/PR/badge.svg)](https://github.com/blaggacao/vicidial-go/actions?query=workflow%3APR)
+[![Go](https://github.com/xoe-labs/vicidial-go/workflows/Go/badge.svg)](https://github.com/xoe-labs/vicidial-go/actions?query=workflow%3AGo)
+[![Release](https://github.com/xoe-labs/vicidial-go/workflows/Release/badge.svg)](https://github.com/xoe-labs/vicidial-go/actions?query=workflow%3ARelease)
+[![PR](https://github.com/xoe-labs/vicidial-go/workflows/PR/badge.svg)](https://github.com/xoe-labs/vicidial-go/actions?query=workflow%3APR)
 [![codecov](https://codecov.io/gh/blaggacao/vicidial-go/branch/master/graph/badge.svg)](https://codecov.io/gh/blaggacao/vicidial-go)
 [![Go Report Card](https://goreportcard.com/badge/moul.io/golang-repo-template)](https://goreportcard.com/report/moul.io/golang-repo-template)
 <!--
@@ -33,7 +33,7 @@ foo@bar:~$$ vicigo adaptive-dialer
 
 ### Releases
 
-See https://github.com/blaggacao/vicidial-go/releases
+See https://github.com/xoe-labs/vicidial-go/releases
 
 ## Contribute
 
@@ -76,7 +76,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/blaggacao"><img src="https://avatars2.githubusercontent.com/u/7548295?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Arnold</b></sub></a><br /><a href="#maintenance-blaggacao" title="Maintenance">🚧</a> <a href="https://github.com/blaggacao/vicidial-go/commits?author=blaggacao" title="Documentation">📖</a> <a href="https://github.com/blaggacao/vicidial-go/commits?author=blaggacao" title="Tests">⚠️</a> <a href="https://github.com/blaggacao/vicidial-go/commits?author=blaggacao" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/blaggacao"><img src="https://avatars2.githubusercontent.com/u/7548295?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Arnold</b></sub></a><br /><a href="#maintenance-blaggacao" title="Maintenance">🚧</a> <a href="https://github.com/xoe-labs/vicidial-go/commits?author=blaggacao" title="Documentation">📖</a> <a href="https://github.com/xoe-labs/vicidial-go/commits?author=blaggacao" title="Tests">⚠️</a> <a href="https://github.com/xoe-labs/vicidial-go/commits?author=blaggacao" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/lina2358"><img src="https://avatars2.githubusercontent.com/u/31328370?s=460&v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lina Avendano</b></sub></a><br /><a href="#financial-lina2358" title="Financial">💵</a> <a href="#business-lina2358" title="Business development">💼</a> <a href="#ideas-lina2358" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-lina2358" title="Project Management">📆</a></td>
   </tr>
 </table>

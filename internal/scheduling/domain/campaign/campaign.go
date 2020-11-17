@@ -12,6 +12,7 @@ type priority struct {
 	factor int    `enum:"3,2,1"`
 }
 
+// Campaign represents a capaign covered by a scheduler
 type Campaign struct {
 	uuid     string   `meta:"getter"`
 	name     string   `meta:"getter"`

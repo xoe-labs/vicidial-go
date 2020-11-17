@@ -10,23 +10,19 @@ import (
 
 	// "github.com/pkg/errors"
 
-	"github.com/blaggacao/vicidial-go/internal/campaigns/domain/lead"
-	// cErrors "github.com/blaggacao/vicidial-go/internal/common/errors"
+	"github.com/xoe-labs/vicidial-go/internal/campaigns/domain/lead"
 )
 
-// A Campaign starts when an audio connection between two parties is established
-// and ends when the adio connection is terminated.
+// Campaign represents the aggregate of the campaign service
 type Campaign struct {
-	uuid        string `ddd:"required'missing campaign UUID'" meta:"equal"`
-	name        string `ddd:"required'missing capmaing name'" meta:"stringer"`
-	active      bool   `ddd:"private" meta:"getter"`
-	callerId    string `meta:"stringer;getter"`
-	leads       []lead.Lead
-	doNotCall   []lead.Lead
-	resultCodes []string
+	uuid      string      `ddd:"required'missing campaign UUID'" meta:"equal"`
+	name      string      `ddd:"required'missing campaign name'" meta:"stringer"`
+	active    bool        `ddd:"private" meta:"getter"`
+	callerId  string      `meta:"stringer;getter"`
+	leads     []lead.Lead `meta:"filter"`
+	doNotCall []lead.Lead ``
 
-	dialFilter string
+	availableResultSentinels []string `meta:"getter"`
 
-	routerUUID    string
-	schedulerUUID string
+	routeUUID string
 }

@@ -7,42 +7,24 @@
 package scheduler
 
 import (
-	"fmt"
-	"github.com/pkg/errors"
+	// "fmt"
+	// "github.com/pkg/errors"
 
-	"github.com/blaggacao/vicidial-go/internal/scheduling/domain/call"
-	"github.com/blaggacao/vicidial-go/internal/scheduling/domain/agent"
-	"github.com/blaggacao/vicidial-go/internal/scheduling/domain/campaign"
+	"github.com/xoe-labs/vicidial-go/internal/scheduling/domain/agent"
+	"github.com/xoe-labs/vicidial-go/internal/scheduling/domain/call"
+	"github.com/xoe-labs/vicidial-go/internal/scheduling/domain/campaign"
+	"github.com/xoe-labs/vicidial-go/internal/scheduling/domain/leadqueryfilter"
 )
 
-// Schedulers wraps a slice of schedulers
-type Schedulers struct {
-	schedulers []Scheduler // TODO: Right pattern to check unique agent assignment?
-}
-
-
-func (ss Schedulers) validate(s Scheduler) error {
-	// agents can only be assigned to one scheduler at a time
-	for _, agent := range s.assignedAgents {
-		for _, existingScheduler := range ss.schedulers {
-			for _, assignedAgent := range existingScheduler.assignedAgents {
-				if agent.Equal(assignedAgent) {
-					return errors.WithStack(fmt.Errorf("agent %s, scheduler %s: %w", agent, ss, ErrAgentAlreadyAssigned))
-				}
-			}
-		}
-	}
-	return nil
-}
-
-// A Scheduler represents a call scheduler for a group of agents.
+// Scheduler represents a call scheduler for a group of agents.
 type Scheduler struct {
 	uuid string `ddd:"required'missing UUID'" meta:"equal"`
 	name string `ddd:"required"missing name'" meta:"stringer"`
 
-	coveredCampaigns []campaign.Campaign `meta:"getter"`
-	callQueue        []call.Call         `ddd:"private"`
-	callQueueMinSize int                 `ddd:"required'queue min size is missing'`
+	coveredCampaigns []campaign.Campaign             `meta:"getter"`
+	callQueue        []call.Call                     `ddd:"private"`
+	callQueueMinSize int                             `ddd:"required'queue min size is missing'`
+	leadQueryFilter  leadqueryfilter.LeadQueryFilter ``
 
 	assignedAgents []agent.Agent ``
 }

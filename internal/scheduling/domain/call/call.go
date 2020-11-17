@@ -9,20 +9,19 @@ package call
 import (
 	// "github.com/pkg/errors"
 
-	"github.com/blaggacao/vicidial-go/internal/common/party"
+	"github.com/xoe-labs/vicidial-go/internal/common/party"
 
-	// cErrors "github.com/blaggacao/vicidial-go/internal/common/errors"
+	// cErrors "github.com/xoe-labs/vicidial-go/internal/common/errors"
 )
 
 type meta struct {
 	leadUUID string
 }
 
-// A Call represents a calling schedule for a group of agents.
+// Call represents a calling schedule for a group of agents.
 type Call struct {
 	meta meta
 	remoteParty party.RemoteParty ``
 	localParty  party.LocalParty  ``
-	routeUUID   string            ``
 }
 

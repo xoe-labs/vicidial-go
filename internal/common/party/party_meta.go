@@ -7,20 +7,38 @@ import (
 	"fmt"
 )
 
-// Equal answers whether v is equivalent to p.
-// Always returns false if v is not a Party.
-func (p Party) Equal(v interface{}) bool {
-	p2, ok := v.(Party)
+// Equal answers whether v is equivalent to l.
+// Always returns false if v is not a LocalParty.
+func (l LocalParty) Equal(v interface{}) bool {
+	l2, ok := v.(LocalParty)
 	if !ok {
 		return false
 	}
-	if p.uuid != p2.uuid {
+	if l.uuid != l2.uuid {
 		return false
 	}
 	return true
 }
 
-// String returns the "native" format of Party. Implements the fmt.Stringer interface.
-func (p Party) String() string {
-	return fmt.Sprintf("%v %v", p.pType, p.name)
+// String returns the "native" format of LocalParty. Implements the fmt.Stringer interface.
+func (l LocalParty) String() string {
+	return fmt.Sprintf("%v %v", l.name, l.pType)
+}
+
+// Equal answers whether v is equivalent to r.
+// Always returns false if v is not a RemoteParty.
+func (r RemoteParty) Equal(v interface{}) bool {
+	r2, ok := v.(RemoteParty)
+	if !ok {
+		return false
+	}
+	if r.uuid != r2.uuid {
+		return false
+	}
+	return true
+}
+
+// String returns the "native" format of RemoteParty. Implements the fmt.Stringer interface.
+func (r RemoteParty) String() string {
+	return fmt.Sprintf("%v", r.name)
 }

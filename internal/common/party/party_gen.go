@@ -8,13 +8,10 @@ import (
 
 // Generators ...
 
-// New returns a guaranteed-to-be-valid Party or an error
-func New(uuid string, pType PartyType, name string, endpointUUID string) (*Party, error) {
+// New returns a guaranteed-to-be-valid RemoteParty or an error
+func New(uuid string, name string, endpointUUID string) (*RemoteParty, error) {
 	if reflect.ValueOf(uuid).IsZero() {
 		return nil, errors.New("missing party UUID")
-	}
-	if reflect.ValueOf(pType).IsZero() {
-		return nil, errors.New("missing party type")
 	}
 	if reflect.ValueOf(name).IsZero() {
 		return nil, errors.New("missing party name")
@@ -22,32 +19,31 @@ func New(uuid string, pType PartyType, name string, endpointUUID string) (*Party
 	if reflect.ValueOf(endpointUUID).IsZero() {
 		return nil, errors.New("missing endpoint UUID")
 	}
-	p := &Party{
+	r := &RemoteParty{
 		endpointUUID: endpointUUID,
 		name:         name,
-		pType:        pType,
 		uuid:         uuid,
 	}
-	return p, nil
+	return r, nil
 }
 
-// MustNew returns a guaranteed-to-be-valid Party or panics
-func MustNew(uuid string, pType PartyType, name string, endpointUUID string) *Party {
-	p, err := New(uuid, pType, name, endpointUUID)
+// MustNew returns a guaranteed-to-be-valid RemoteParty or panics
+func MustNew(uuid string, name string, endpointUUID string) *RemoteParty {
+	r, err := New(uuid, name, endpointUUID)
 	if err != nil {
 		panic(err)
 	}
-	return p
+	return r
 }
 
 // Marshalers ...
 
-// UnmarshalFromRepository unmarshals Party from the repository so that non-constructable
+// UnmarshalFromRepository unmarshals RemoteParty from the repository so that non-constructable
 // private fields can still be initialized from (private) repository state
 //
 // Important: DO NEVER USE THIS METHOD EXCEPT FROM THE REPOSITORY
 // Reason: This method initializes private state, so you could corrupt the domain.
-func UnmarshalFromRepository(uuid string, pType PartyType, name string, endpointUUID string) *Party {
-	p := MustNew(uuid, pType, name, endpointUUID)
-	return p
+func UnmarshalFromRepository(uuid string, name string, endpointUUID string) *RemoteParty {
+	r := MustNew(uuid, name, endpointUUID)
+	return r
 }
