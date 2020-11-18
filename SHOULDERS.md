@@ -293,6 +293,8 @@ Thank you to the following **GIANTS**:
 
 * [github.com/tmc/grpc-websocket-proxy](https://godoc.org/github.com/tmc/grpc-websocket-proxy)
 
+* [github.com/ttacon/uri](https://godoc.org/github.com/ttacon/uri)
+
 * [github.com/unchartedsoftware/witch](https://godoc.org/github.com/unchartedsoftware/witch)
 
 * [github.com/urfave/cli](https://godoc.org/github.com/urfave/cli)
