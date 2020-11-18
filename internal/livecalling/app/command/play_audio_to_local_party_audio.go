@@ -20,7 +20,7 @@ import (
 
 const (
 	// ErrNotAuthorizedToPlayAudioToLocalParty signals that the command issuer is not authorized to play the audio to the local party
-	ErrNotAuthorizedToPlayAudioToLocalParty = cerrors.CommonError("ErrNotAuthorizedToPlayAudioToLocalParty")
+	ErrNotAuthorizedToPlayAudioToLocalParty = cerrors.AuthorizationError("ErrNotAuthorizedToPlayAudioToLocalParty")
 )
 
 // PlayAudioToLocalPartyHandler knows how to play an audio

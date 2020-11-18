@@ -20,7 +20,7 @@ import (
 
 const (
 	// ErrNotAuthorizedToStopRecording signals that the command issuer is not authorized to stop the recording
-	ErrNotAuthorizedToStopRecording = cerrors.CommonError("ErrNotAuthorizedToStopRecording")
+	ErrNotAuthorizedToStopRecording = cerrors.AuthorizationError("ErrNotAuthorizedToStopRecording")
 )
 
 // StopRecordingHandler knows how to stop a recording

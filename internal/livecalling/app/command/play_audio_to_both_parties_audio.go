@@ -20,7 +20,7 @@ import (
 
 const (
 	// ErrNotAuthorizedToPlayAudioToBothParties signals that the command issuer is not authorized to play the audio to both parties
-	ErrNotAuthorizedToPlayAudioToBothParties = cerrors.CommonError("ErrNotAuthorizedToPlayAudioToBothParties")
+	ErrNotAuthorizedToPlayAudioToBothParties = cerrors.AuthorizationError("ErrNotAuthorizedToPlayAudioToBothParties")
 )
 
 // PlayAudioToBothPartiesHandler knows how to play an audio

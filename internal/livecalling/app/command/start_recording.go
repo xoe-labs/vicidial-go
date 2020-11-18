@@ -20,7 +20,7 @@ import (
 
 const (
 	// ErrNotAuthorizedToStartRecording signals that the command issuer is not authorized to start the recording
-	ErrNotAuthorizedToStartRecording = cerrors.CommonError("ErrNotAuthorizedToStartRecording")
+	ErrNotAuthorizedToStartRecording = cerrors.AuthorizationError("ErrNotAuthorizedToStartRecording")
 )
 
 // StartRecordingHandler knows how to start a recording
