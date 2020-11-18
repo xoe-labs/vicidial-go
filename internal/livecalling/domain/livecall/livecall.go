@@ -32,7 +32,8 @@ type Livecall struct {
 	endTime           time.Time          `ddd:"private"`
 
 	resultSentinel string `ddd:"private" meta:"setter"`
-	recording      string
+
+	livecallRecording
 }
 // IsResolved returns true if the livecall has a local party
 // local party can come from resolving a route or can be preexisting ("overridden")
