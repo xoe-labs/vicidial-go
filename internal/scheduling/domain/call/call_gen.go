@@ -3,13 +3,14 @@ package call
 
 import (
 	"fmt"
-	party "github.com/xoe-labs/vicidial-go/internal/common/party"
+	local "github.com/xoe-labs/vicidial-go/internal/common/party/local"
+	remote "github.com/xoe-labs/vicidial-go/internal/common/party/remote"
 )
 
 // Constructors ...
 
 // New returns a guaranteed-to-be-valid Call or an error
-func New(meta meta, remoteParty party.RemoteParty, localParty party.LocalParty) (*Call, error) {
+func New(meta meta, remoteParty remote.RemoteParty, localParty local.LocalParty) (*Call, error) {
 	c := &Call{
 		localParty:  localParty,
 		meta:        meta,
@@ -19,7 +20,7 @@ func New(meta meta, remoteParty party.RemoteParty, localParty party.LocalParty) 
 }
 
 // MustNew returns a guaranteed-to-be-valid Call or panics
-func MustNew(meta meta, remoteParty party.RemoteParty, localParty party.LocalParty) *Call {
+func MustNew(meta meta, remoteParty remote.RemoteParty, localParty local.LocalParty) *Call {
 	c, err := New(meta, remoteParty, localParty)
 	if err != nil {
 		panic(err)
@@ -34,7 +35,7 @@ func MustNew(meta meta, remoteParty party.RemoteParty, localParty party.LocalPar
 //
 // Important: DO NEVER USE THIS METHOD EXCEPT FROM THE REPOSITORY
 // Reason: This method initializes private state, so you could corrupt the domain.
-func UnmarshalFromRepository(meta meta, remoteParty party.RemoteParty, localParty party.LocalParty) *Call {
+func UnmarshalFromRepository(meta meta, remoteParty remote.RemoteParty, localParty local.LocalParty) *Call {
 	c := MustNew(meta, remoteParty, localParty)
 	return c
 }

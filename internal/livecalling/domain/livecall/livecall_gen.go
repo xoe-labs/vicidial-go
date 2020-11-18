@@ -5,7 +5,8 @@ import (
 	"errors"
 	"fmt"
 	gouuid "github.com/satori/go.uuid"
-	party "github.com/xoe-labs/vicidial-go/internal/common/party"
+	local "github.com/xoe-labs/vicidial-go/internal/common/party/local"
+	remote "github.com/xoe-labs/vicidial-go/internal/common/party/remote"
 	"reflect"
 	"time"
 )
@@ -13,7 +14,7 @@ import (
 // Constructors ...
 
 // New returns a guaranteed-to-be-valid Livecall or an error
-func New(meta meta, uuid gouuid.UUID, lead party.RemoteParty, localParty party.LocalParty, localPartyHistory []party.LocalParty, startTime time.Time, livecallRecording livecallRecording, livecallPlayAudio livecallPlayAudio) (*Livecall, error) {
+func New(meta meta, uuid gouuid.UUID, lead remote.RemoteParty, localParty local.LocalParty, localPartyHistory []local.LocalParty, startTime time.Time, livecallRecording livecallRecording, livecallPlayAudio livecallPlayAudio) (*Livecall, error) {
 	if reflect.ValueOf(uuid).IsZero() {
 		return nil, errors.New("missing UUID")
 	}
@@ -34,7 +35,7 @@ func New(meta meta, uuid gouuid.UUID, lead party.RemoteParty, localParty party.L
 }
 
 // MustNew returns a guaranteed-to-be-valid Livecall or panics
-func MustNew(meta meta, uuid gouuid.UUID, lead party.RemoteParty, localParty party.LocalParty, localPartyHistory []party.LocalParty, startTime time.Time, livecallRecording livecallRecording, livecallPlayAudio livecallPlayAudio) *Livecall {
+func MustNew(meta meta, uuid gouuid.UUID, lead remote.RemoteParty, localParty local.LocalParty, localPartyHistory []local.LocalParty, startTime time.Time, livecallRecording livecallRecording, livecallPlayAudio livecallPlayAudio) *Livecall {
 	l, err := New(meta, uuid, lead, localParty, localPartyHistory, startTime, livecallRecording, livecallPlayAudio)
 	if err != nil {
 		panic(err)
@@ -49,7 +50,7 @@ func MustNew(meta meta, uuid gouuid.UUID, lead party.RemoteParty, localParty par
 //
 // Important: DO NEVER USE THIS METHOD EXCEPT FROM THE REPOSITORY
 // Reason: This method initializes private state, so you could corrupt the domain.
-func UnmarshalFromRepository(meta meta, uuid gouuid.UUID, lead party.RemoteParty, localParty party.LocalParty, localPartyHistory []party.LocalParty, startTime time.Time, livecallRecording livecallRecording, livecallPlayAudio livecallPlayAudio, endTime time.Time, resultSentinel string) *Livecall {
+func UnmarshalFromRepository(meta meta, uuid gouuid.UUID, lead remote.RemoteParty, localParty local.LocalParty, localPartyHistory []local.LocalParty, startTime time.Time, livecallRecording livecallRecording, livecallPlayAudio livecallPlayAudio, endTime time.Time, resultSentinel string) *Livecall {
 	l := MustNew(meta, uuid, lead, localParty, localPartyHistory, startTime, livecallRecording, livecallPlayAudio)
 	l.endTime = endTime
 	l.resultSentinel = resultSentinel
@@ -59,12 +60,12 @@ func UnmarshalFromRepository(meta meta, uuid gouuid.UUID, lead party.RemoteParty
 // Accessors ...
 
 // Lead returns lead value
-func (l *Livecall) Lead() party.RemoteParty {
+func (l *Livecall) Lead() remote.RemoteParty {
 	return l.lead
 }
 
 // LocalParty returns localParty value
-func (l *Livecall) LocalParty() party.LocalParty {
+func (l *Livecall) LocalParty() local.LocalParty {
 	return l.localParty
 }
 
