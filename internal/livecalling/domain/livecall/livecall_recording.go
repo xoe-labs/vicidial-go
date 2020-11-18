@@ -4,6 +4,10 @@
 package livecall
 
 import (
+	"time"
+
+	"github.com/ttacon/uri"
+
 	cerrors "github.com/xoe-labs/vicidial-go/internal/common/errors"
 	"github.com/xoe-labs/vicidial-go/internal/livecalling/domain"
 )
@@ -17,7 +21,9 @@ const (
 
 // livecall recording domain topic
 type livecallRecording struct {
-	recording      string
+	recordingStartTime time.Time
+	recordingStopTime  time.Time
+	recordingFileURI   uri.URI
 }
 
 // StartRecording starts a recording through a communications manager
