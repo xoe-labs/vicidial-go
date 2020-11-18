@@ -19,13 +19,9 @@ type Commands struct {
 	StartRecording command.StartRecordingHandler
 	StopRecording  command.StopRecordingHandler
 
-	PlayAudio command.PlayAudioHandler
-
-	// CancelTraining   command.CancelTrainingHandler
-	// ScheduleTraining command.ScheduleTrainingHandler
-
-	// MakeHoursAvailable   command.MakeHoursAvailableHandler
-	// MakeHoursUnavailable command.MakeHoursUnavailableHandler
+	PlayAudioToBothParties command.PlayAudioToBothPartiesHandler
+	PlayAudioToRemoteParty command.PlayAudioToRemotePartyHandler
+	PlayAudioToLocalParty  command.PlayAudioToLocalPartyHandler
 }
 
 type Queries struct {
