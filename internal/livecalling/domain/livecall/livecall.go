@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate go run github.com/xoe-labs/go-generators/ddd-domain-gen -t Livecall
-//go:generate go run github.com/phelmkamp/metatag
 
 package livecall
 
@@ -10,6 +9,7 @@ import (
 	"time"
 
 	// "github.com/pkg/errors"
+	"github.com/satori/go.uuid"
 
 	"github.com/xoe-labs/vicidial-go/internal/common/party"
 )
@@ -24,21 +24,21 @@ type meta struct {
 type Livecall struct {
 	meta meta
 
-	uuid              string             `ddd:"required'missing UUID'" meta:"equal"`
-	lead              party.RemoteParty  `ddd:"required'missing lead'" meta:"getter;stringer"`
-	localParty        party.LocalParty   `meta:"getter;stringer"`
+	uuid              uuid.UUID          `ddd:"required,missing UUID;equal"`
+	lead              party.RemoteParty  `ddd:"required,missing lead;getter;stringer"`
+	localParty        party.LocalParty   `ddd:"getter;stringer"`
 	localPartyHistory []party.LocalParty ``
 	startTime         time.Time          ``
 	endTime           time.Time          `ddd:"private"`
 
-	resultSentinel string `ddd:"private" meta:"setter"`
+	resultSentinel string `ddd:"private;setter"`
 
 	livecallRecording
 	livecallPlayAudio
 }
+
 // IsResolved returns true if the livecall has a local party
 // local party can come from resolving a route or can be preexisting ("overridden")
 func (l *Livecall) IsResolved() bool {
 	return l.localParty != party.LocalParty{}
 }
-

@@ -3,13 +3,15 @@ package party
 
 import (
 	"errors"
+	"fmt"
+	gouuid "github.com/satori/go.uuid"
 	"reflect"
 )
 
-// Generators ...
+// Constructors ...
 
 // New returns a guaranteed-to-be-valid RemoteParty or an error
-func New(uuid string, name string, endpointUUID string) (*RemoteParty, error) {
+func New(uuid gouuid.UUID, name string, endpointUUID string) (*RemoteParty, error) {
 	if reflect.ValueOf(uuid).IsZero() {
 		return nil, errors.New("missing party UUID")
 	}
@@ -28,7 +30,7 @@ func New(uuid string, name string, endpointUUID string) (*RemoteParty, error) {
 }
 
 // MustNew returns a guaranteed-to-be-valid RemoteParty or panics
-func MustNew(uuid string, name string, endpointUUID string) *RemoteParty {
+func MustNew(uuid gouuid.UUID, name string, endpointUUID string) *RemoteParty {
 	r, err := New(uuid, name, endpointUUID)
 	if err != nil {
 		panic(err)
@@ -43,7 +45,29 @@ func MustNew(uuid string, name string, endpointUUID string) *RemoteParty {
 //
 // Important: DO NEVER USE THIS METHOD EXCEPT FROM THE REPOSITORY
 // Reason: This method initializes private state, so you could corrupt the domain.
-func UnmarshalFromRepository(uuid string, name string, endpointUUID string) *RemoteParty {
+func UnmarshalFromRepository(uuid gouuid.UUID, name string, endpointUUID string) *RemoteParty {
 	r := MustNew(uuid, name, endpointUUID)
 	return r
+}
+
+// Accessors ...
+
+// Utilities ...
+
+// Equal answers whether v is equivalent to r
+// Always returns false if v is not a RemoteParty
+func (r RemoteParty) Equal(v interface{}) bool {
+	other, ok := v.(RemoteParty)
+	if !ok {
+		return false
+	}
+	if r.uuid != other.uuid {
+		return false
+	}
+	return r
+}
+
+// String implements the fmt.Stringer interface and returns the native format of RemoteParty
+func (r RemoteParty) String() string {
+	return fmt.Sprintf("%s ", r.name)
 }

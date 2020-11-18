@@ -26,19 +26,19 @@ const (
 // StartRecordingHandler knows how to start a recording
 type StartRecordingHandler struct {
 	aggregate domain.Repository
-	commMgr   domain.CommManager
+	callMgr   domain.CallManager
 	policy    app.Policy
 }
 
 // NewStartRecordingHandler returs a StartRecordingHandler
-func NewStartRecordingHandler(aggregate domain.Repository, commMgr domain.CommManager) StartRecordingHandler {
+func NewStartRecordingHandler(aggregate domain.Repository, callMgr domain.CallManager) StartRecordingHandler {
 	if aggregate == nil {
 		panic("nil aggregate")
 	}
-	if commMgr == nil {
-		panic("nil commMgr")
+	if callMgr == nil {
+		panic("nil callMgr")
 	}
-	return StartRecordingHandler{aggregate: aggregate, commMgr: commMgr}
+	return StartRecordingHandler{aggregate: aggregate, callMgr: callMgr}
 }
 
 // Handle starts a recording
@@ -48,7 +48,7 @@ func (h StartRecordingHandler) Handle(ctx context.Context, livecallToStartRecord
 		if ok := h.policy.Can(ctx, "StartRecording", userID, elevationToken, *l); !ok {
 			return ErrNotAuthorizedToStartRecording
 		}
-		if err := l.StartRecording(h.commMgr); err != nil {
+		if err := l.StartRecording(h.callMgr); err != nil {
 			return err
 		}
 		return nil

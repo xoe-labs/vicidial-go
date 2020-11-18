@@ -3,13 +3,15 @@ package agent
 
 import (
 	"errors"
+	"fmt"
+	gouuid "github.com/satori/go.uuid"
 	"reflect"
 )
 
-// Generators ...
+// Constructors ...
 
 // New returns a guaranteed-to-be-valid Agent or an error
-func New(uuid string, name string) (*Agent, error) {
+func New(uuid gouuid.UUID, name string) (*Agent, error) {
 	if reflect.ValueOf(uuid).IsZero() {
 		return nil, errors.New("missing UUID")
 	}
@@ -24,7 +26,7 @@ func New(uuid string, name string) (*Agent, error) {
 }
 
 // MustNew returns a guaranteed-to-be-valid Agent or panics
-func MustNew(uuid string, name string) *Agent {
+func MustNew(uuid gouuid.UUID, name string) *Agent {
 	a, err := New(uuid, name)
 	if err != nil {
 		panic(err)
@@ -39,7 +41,29 @@ func MustNew(uuid string, name string) *Agent {
 //
 // Important: DO NEVER USE THIS METHOD EXCEPT FROM THE REPOSITORY
 // Reason: This method initializes private state, so you could corrupt the domain.
-func UnmarshalFromRepository(uuid string, name string) *Agent {
+func UnmarshalFromRepository(uuid gouuid.UUID, name string) *Agent {
 	a := MustNew(uuid, name)
 	return a
+}
+
+// Accessors ...
+
+// Utilities ...
+
+// Equal answers whether v is equivalent to a
+// Always returns false if v is not a Agent
+func (a Agent) Equal(v interface{}) bool {
+	other, ok := v.(Agent)
+	if !ok {
+		return false
+	}
+	if a.uuid != other.uuid {
+		return false
+	}
+	return a
+}
+
+// String implements the fmt.Stringer interface and returns the native format of Agent
+func (a Agent) String() string {
+	return fmt.Sprintf("%s ", a.name)
 }

@@ -26,19 +26,19 @@ const (
 // PlayAudioToRemotePartyHandler knows how to play an audio
 type PlayAudioToRemotePartyHandler struct {
 	aggregate domain.Repository
-	commMgr   domain.CommManager
+	callMgr   domain.CallManager
 	policy    app.Policy
 }
 
 // NewPlayAudioToRemotePartyHandler returs a PlayAudioToRemotePartyHandler
-func NewPlayAudioToRemotePartyHandler(aggregate domain.Repository, commMgr domain.CommManager) PlayAudioToRemotePartyHandler {
+func NewPlayAudioToRemotePartyHandler(aggregate domain.Repository, callMgr domain.CallManager) PlayAudioToRemotePartyHandler {
 	if aggregate == nil {
 		panic("nil aggregate")
 	}
-	if commMgr == nil {
-		panic("nil commMgr")
+	if callMgr == nil {
+		panic("nil callMgr")
 	}
-	return PlayAudioToRemotePartyHandler{aggregate: aggregate, commMgr: commMgr}
+	return PlayAudioToRemotePartyHandler{aggregate: aggregate, callMgr: callMgr}
 }
 
 // Handle plays an audio to the remote party
@@ -48,7 +48,7 @@ func (h PlayAudioToRemotePartyHandler) Handle(ctx context.Context, livecallToPla
 		if ok := h.policy.Can(ctx, "PlayAudioToRemoteParty", userID, elevationToken, *l); !ok {
 			return ErrNotAuthorizedToPlayAudioToRemoteParty
 		}
-		if err := l.PlayAudioToRemoteParty(h.commMgr); err != nil {
+		if err := l.PlayAudioToRemoteParty(h.callMgr); err != nil {
 			return err
 		}
 		return nil

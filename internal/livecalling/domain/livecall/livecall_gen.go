@@ -3,15 +3,17 @@ package livecall
 
 import (
 	"errors"
+	"fmt"
+	gouuid "github.com/satori/go.uuid"
 	party "github.com/xoe-labs/vicidial-go/internal/common/party"
 	"reflect"
 	"time"
 )
 
-// Generators ...
+// Constructors ...
 
 // New returns a guaranteed-to-be-valid Livecall or an error
-func New(meta meta, uuid string, lead party.RemoteParty, localParty party.LocalParty, localPartyHistory []party.LocalParty, startTime time.Time, recording string) (*Livecall, error) {
+func New(meta meta, uuid gouuid.UUID, lead party.RemoteParty, localParty party.LocalParty, localPartyHistory []party.LocalParty, startTime time.Time, livecallRecording livecallRecording, livecallPlayAudio livecallPlayAudio) (*Livecall, error) {
 	if reflect.ValueOf(uuid).IsZero() {
 		return nil, errors.New("missing UUID")
 	}
@@ -20,10 +22,11 @@ func New(meta meta, uuid string, lead party.RemoteParty, localParty party.LocalP
 	}
 	l := &Livecall{
 		lead:              lead,
+		livecallPlayAudio: livecallPlayAudio,
+		livecallRecording: livecallRecording,
 		localParty:        localParty,
 		localPartyHistory: localPartyHistory,
 		meta:              meta,
-		recording:         recording,
 		startTime:         startTime,
 		uuid:              uuid,
 	}
@@ -31,8 +34,8 @@ func New(meta meta, uuid string, lead party.RemoteParty, localParty party.LocalP
 }
 
 // MustNew returns a guaranteed-to-be-valid Livecall or panics
-func MustNew(meta meta, uuid string, lead party.RemoteParty, localParty party.LocalParty, localPartyHistory []party.LocalParty, startTime time.Time, recording string) *Livecall {
-	l, err := New(meta, uuid, lead, localParty, localPartyHistory, startTime, recording)
+func MustNew(meta meta, uuid gouuid.UUID, lead party.RemoteParty, localParty party.LocalParty, localPartyHistory []party.LocalParty, startTime time.Time, livecallRecording livecallRecording, livecallPlayAudio livecallPlayAudio) *Livecall {
+	l, err := New(meta, uuid, lead, localParty, localPartyHistory, startTime, livecallRecording, livecallPlayAudio)
 	if err != nil {
 		panic(err)
 	}
@@ -46,9 +49,46 @@ func MustNew(meta meta, uuid string, lead party.RemoteParty, localParty party.Lo
 //
 // Important: DO NEVER USE THIS METHOD EXCEPT FROM THE REPOSITORY
 // Reason: This method initializes private state, so you could corrupt the domain.
-func UnmarshalFromRepository(meta meta, uuid string, lead party.RemoteParty, localParty party.LocalParty, localPartyHistory []party.LocalParty, startTime time.Time, recording string, endTime time.Time, resultSentinel string) *Livecall {
-	l := MustNew(meta, uuid, lead, localParty, localPartyHistory, startTime, recording)
+func UnmarshalFromRepository(meta meta, uuid gouuid.UUID, lead party.RemoteParty, localParty party.LocalParty, localPartyHistory []party.LocalParty, startTime time.Time, livecallRecording livecallRecording, livecallPlayAudio livecallPlayAudio, endTime time.Time, resultSentinel string) *Livecall {
+	l := MustNew(meta, uuid, lead, localParty, localPartyHistory, startTime, livecallRecording, livecallPlayAudio)
 	l.endTime = endTime
 	l.resultSentinel = resultSentinel
 	return l
+}
+
+// Accessors ...
+
+// Lead returns lead value
+func (l *Livecall) Lead() party.RemoteParty {
+	return l.lead
+}
+
+// LocalParty returns localParty value
+func (l *Livecall) LocalParty() party.LocalParty {
+	return l.localParty
+}
+
+// SetResultSentinel sets resultSentinel value
+func (l *Livecall) SetResultSentinel(resultSentinel string) {
+	l.resultSentinel = resultSentinel
+}
+
+// Utilities ...
+
+// Equal answers whether v is equivalent to l
+// Always returns false if v is not a Livecall
+func (l Livecall) Equal(v interface{}) bool {
+	other, ok := v.(Livecall)
+	if !ok {
+		return false
+	}
+	if l.uuid != other.uuid {
+		return false
+	}
+	return l
+}
+
+// String implements the fmt.Stringer interface and returns the native format of Livecall
+func (l Livecall) String() string {
+	return fmt.Sprintf("%s %s ", l.lead, l.localParty)
 }

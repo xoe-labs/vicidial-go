@@ -3,14 +3,16 @@ package campaign
 
 import (
 	"errors"
+	"fmt"
+	gouuid "github.com/satori/go.uuid"
 	lead "github.com/xoe-labs/vicidial-go/internal/campaigns/domain/lead"
 	"reflect"
 )
 
-// Generators ...
+// Constructors ...
 
 // New returns a guaranteed-to-be-valid Campaign or an error
-func New(uuid string, name string, callerId string, leads []lead.Lead, doNotCall []lead.Lead, availableResultSentinels []string, routeUUID string) (*Campaign, error) {
+func New(uuid gouuid.UUID, name string, callerId string, leads []lead.Lead, doNotCall []lead.Lead, availableResultSentinels []string, routeUUID string) (*Campaign, error) {
 	if reflect.ValueOf(uuid).IsZero() {
 		return nil, errors.New("missing campaign UUID")
 	}
@@ -30,7 +32,7 @@ func New(uuid string, name string, callerId string, leads []lead.Lead, doNotCall
 }
 
 // MustNew returns a guaranteed-to-be-valid Campaign or panics
-func MustNew(uuid string, name string, callerId string, leads []lead.Lead, doNotCall []lead.Lead, availableResultSentinels []string, routeUUID string) *Campaign {
+func MustNew(uuid gouuid.UUID, name string, callerId string, leads []lead.Lead, doNotCall []lead.Lead, availableResultSentinels []string, routeUUID string) *Campaign {
 	c, err := New(uuid, name, callerId, leads, doNotCall, availableResultSentinels, routeUUID)
 	if err != nil {
 		panic(err)
@@ -45,8 +47,45 @@ func MustNew(uuid string, name string, callerId string, leads []lead.Lead, doNot
 //
 // Important: DO NEVER USE THIS METHOD EXCEPT FROM THE REPOSITORY
 // Reason: This method initializes private state, so you could corrupt the domain.
-func UnmarshalFromRepository(uuid string, name string, callerId string, leads []lead.Lead, doNotCall []lead.Lead, availableResultSentinels []string, routeUUID string, active bool) *Campaign {
+func UnmarshalFromRepository(uuid gouuid.UUID, name string, callerId string, leads []lead.Lead, doNotCall []lead.Lead, availableResultSentinels []string, routeUUID string, active bool) *Campaign {
 	c := MustNew(uuid, name, callerId, leads, doNotCall, availableResultSentinels, routeUUID)
 	c.active = active
 	return c
+}
+
+// Accessors ...
+
+// Active returns active value
+func (c *Campaign) Active() bool {
+	return c.active
+}
+
+// CallerId returns callerId value
+func (c *Campaign) CallerId() string {
+	return c.callerId
+}
+
+// AvailableResultSentinels returns availableResultSentinels value
+func (c *Campaign) AvailableResultSentinels() []string {
+	return c.availableResultSentinels
+}
+
+// Utilities ...
+
+// Equal answers whether v is equivalent to c
+// Always returns false if v is not a Campaign
+func (c Campaign) Equal(v interface{}) bool {
+	other, ok := v.(Campaign)
+	if !ok {
+		return false
+	}
+	if c.uuid != other.uuid {
+		return false
+	}
+	return c
+}
+
+// String implements the fmt.Stringer interface and returns the native format of Campaign
+func (c Campaign) String() string {
+	return fmt.Sprintf("%s %s ", c.name, c.callerId)
 }

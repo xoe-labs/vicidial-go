@@ -26,19 +26,19 @@ const (
 // PlayAudioToBothPartiesHandler knows how to play an audio
 type PlayAudioToBothPartiesHandler struct {
 	aggregate domain.Repository
-	commMgr   domain.CommManager
+	callMgr   domain.CallManager
 	policy    app.Policy
 }
 
 // NewPlayAudioToBothPartiesHandler returs a PlayAudioToBothPartiesHandler
-func NewPlayAudioToBothPartiesHandler(aggregate domain.Repository, commMgr domain.CommManager) PlayAudioToBothPartiesHandler {
+func NewPlayAudioToBothPartiesHandler(aggregate domain.Repository, callMgr domain.CallManager) PlayAudioToBothPartiesHandler {
 	if aggregate == nil {
 		panic("nil aggregate")
 	}
-	if commMgr == nil {
-		panic("nil commMgr")
+	if callMgr == nil {
+		panic("nil callMgr")
 	}
-	return PlayAudioToBothPartiesHandler{aggregate: aggregate, commMgr: commMgr}
+	return PlayAudioToBothPartiesHandler{aggregate: aggregate, callMgr: callMgr}
 }
 
 // Handle plays an audio to both parties
@@ -48,7 +48,7 @@ func (h PlayAudioToBothPartiesHandler) Handle(ctx context.Context, livecallToPla
 		if ok := h.policy.Can(ctx, "PlayAudioToBothParties", userID, elevationToken, *l); !ok {
 			return ErrNotAuthorizedToPlayAudioToBothParties
 		}
-		if err := l.PlayAudioToBothParties(h.commMgr); err != nil {
+		if err := l.PlayAudioToBothParties(h.callMgr); err != nil {
 			return err
 		}
 		return nil

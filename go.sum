@@ -256,6 +256,8 @@ github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/subosito/gotenv v1.2.0 h1:Slr1R9HxAlEKefgq5jn9U+DnETlIUa6HfgEzj0g5d7s=
 github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69rRypqCw=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
+github.com/ttacon/uri v0.0.0-20151031145549-8a81e2049497 h1:8J6ie2ysEDdd/DTOW86EV+g7GGxLdGsyrqpcSzHhBdM=
+github.com/ttacon/uri v0.0.0-20151031145549-8a81e2049497/go.mod h1:k9LsYKuqtNwUazpdGgG/ko1ENrBoms1H9ie9IjuY8kM=
 github.com/unchartedsoftware/witch v0.0.0-20200617171400-4f405404126f h1:CfRRJzp88GWCAR3+GrJ/slqrbhCqesDRY/FmT6s4uF8=
 github.com/unchartedsoftware/witch v0.0.0-20200617171400-4f405404126f/go.mod h1:xN7cr17jYCNJzZO78A4c0BcspGPbSAdFNq1NfDEE2do=
 github.com/urfave/cli v1.22.4 h1:u7tSpNPPswAFymm8IehJhy4uJMlUuU/GmqSkvJ1InXA=
@@ -268,6 +270,8 @@ github.com/xoe-labs/go-generators/ddd-domain-gen v0.0.0-20201113145543-666e9681d
 github.com/xoe-labs/go-generators/ddd-domain-gen v0.0.0-20201113145543-666e9681d612/go.mod h1:y6x1nU1eRhxENNxaMxpSzzE2NFB0bWzfqIjUgmkR6IQ=
 github.com/xoe-labs/go-generators/ddd-domain-gen v0.0.0-20201117014753-73faf3f40660 h1:YLFPKkjUSQ4ulzhXyW0j73yA8KVlfAfuststBm3OgmM=
 github.com/xoe-labs/go-generators/ddd-domain-gen v0.0.0-20201117014753-73faf3f40660/go.mod h1:y6x1nU1eRhxENNxaMxpSzzE2NFB0bWzfqIjUgmkR6IQ=
+github.com/xoe-labs/go-generators/ddd-domain-gen v0.0.0-20201118070946-f9fc8b0821db h1:nK28OsFwyqS5aYIq4jhpaZA8p2ebhTIdfXaSsMM7gdw=
+github.com/xoe-labs/go-generators/ddd-domain-gen v0.0.0-20201118070946-f9fc8b0821db/go.mod h1:y6x1nU1eRhxENNxaMxpSzzE2NFB0bWzfqIjUgmkR6IQ=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
@@ -367,6 +371,8 @@ golang.org/x/sys v0.0.0-20201113135734-0a15ea8d9b02 h1:5Ftd3YbC/kANXWCBjvppvUmv1
 golang.org/x/sys v0.0.0-20201113135734-0a15ea8d9b02/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20201116194326-cc9327a14d48 h1:AYCWBZhgIw6XobZ5CibNJr0Rc4ZofGGKvWa1vcx2IGk=
 golang.org/x/sys v0.0.0-20201116194326-cc9327a14d48/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20201117222635-ba5294a509c7 h1:s330+6z/Ko3J0o6rvOcwXe5nzs7UT9tLKHoOXYn6uE0=
+golang.org/x/sys v0.0.0-20201117222635-ba5294a509c7/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.3.2/go.mod h1:bEr9sfX3Q8Zfm5fL9x+3itogRgK3+ptLWKqgva+5dAk=
@@ -401,6 +407,8 @@ golang.org/x/tools v0.0.0-20201113164040-559c4acc06b6 h1:LTVgvEdikVZCooj7814/UBp
 golang.org/x/tools v0.0.0-20201113164040-559c4acc06b6/go.mod h1:emZCQorbCU4vsT4fOWvOPXz4eW1wZW4PmDk9uLelYpA=
 golang.org/x/tools v0.0.0-20201116182000-1d699438d2cf h1:sDQg8i3k24bqfv1V4MugOhRCHMRzkrHdLJX5QraRSt4=
 golang.org/x/tools v0.0.0-20201116182000-1d699438d2cf/go.mod h1:emZCQorbCU4vsT4fOWvOPXz4eW1wZW4PmDk9uLelYpA=
+golang.org/x/tools v0.0.0-20201118030313-598b068a9102 h1:kr6Ik/EJgxdTSLX+rSiDounHdHWMBu9Ks/ghr2hWNpo=
+golang.org/x/tools v0.0.0-20201118030313-598b068a9102/go.mod h1:emZCQorbCU4vsT4fOWvOPXz4eW1wZW4PmDk9uLelYpA=
 golang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 golang.org/x/xerrors v0.0.0-20191011141410-1b5146add898/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=

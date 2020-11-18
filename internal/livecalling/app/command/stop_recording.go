@@ -26,19 +26,19 @@ const (
 // StopRecordingHandler knows how to stop a recording
 type StopRecordingHandler struct {
 	aggregate domain.Repository
-	commMgr   domain.CommManager
+	callMgr   domain.CallManager
 	policy    app.Policy
 }
 
 // NewStopRecordingHandler returs a StopRecordingHandler
-func NewStopRecordingHandler(aggregate domain.Repository, commMgr domain.CommManager) StopRecordingHandler {
+func NewStopRecordingHandler(aggregate domain.Repository, callMgr domain.CallManager) StopRecordingHandler {
 	if aggregate == nil {
 		panic("nil aggregate")
 	}
-	if commMgr == nil {
-		panic("nil commMgr")
+	if callMgr == nil {
+		panic("nil callMgr")
 	}
-	return StopRecordingHandler{aggregate: aggregate, commMgr: commMgr}
+	return StopRecordingHandler{aggregate: aggregate, callMgr: callMgr}
 }
 
 // Handle stops a recording
@@ -48,7 +48,7 @@ func (h StopRecordingHandler) Handle(ctx context.Context, livecallToStopRecordin
 		if ok := h.policy.Can(ctx, "StopRecording", userID, elevationToken, *l); !ok {
 			return ErrNotAuthorizedToStopRecording
 		}
-		if err := l.StopRecording(h.commMgr); err != nil {
+		if err := l.StopRecording(h.callMgr); err != nil {
 			return err
 		}
 		return nil

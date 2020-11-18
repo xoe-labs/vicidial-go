@@ -3,16 +3,18 @@ package lead
 
 import (
 	"errors"
+	"fmt"
 	address "github.com/Boostport/address"
 	phonenumbers "github.com/nyaruka/phonenumbers"
+	gouuid "github.com/satori/go.uuid"
 	"net/mail"
 	"reflect"
 )
 
-// Generators ...
+// Constructors ...
 
 // New returns a guaranteed-to-be-valid Lead or an error
-func New(uuid string, name string, selfIdentifier string, statusCode leadStatusCode, resultSentinel string, address address.Address, mail mail.Address, numbers []phonenumbers.PhoneNumber, gender string, birthday string, comment string) (*Lead, error) {
+func New(uuid gouuid.UUID, name string, selfIdentifier string, statusCode leadStatusCode, resultSentinel string, address address.Address, mail mail.Address, numbers []phonenumbers.PhoneNumber, gender string, birthday string, comment string) (*Lead, error) {
 	if reflect.ValueOf(uuid).IsZero() {
 		return nil, errors.New("missing lead UUID")
 	}
@@ -36,7 +38,7 @@ func New(uuid string, name string, selfIdentifier string, statusCode leadStatusC
 }
 
 // MustNew returns a guaranteed-to-be-valid Lead or panics
-func MustNew(uuid string, name string, selfIdentifier string, statusCode leadStatusCode, resultSentinel string, address address.Address, mail mail.Address, numbers []phonenumbers.PhoneNumber, gender string, birthday string, comment string) *Lead {
+func MustNew(uuid gouuid.UUID, name string, selfIdentifier string, statusCode leadStatusCode, resultSentinel string, address address.Address, mail mail.Address, numbers []phonenumbers.PhoneNumber, gender string, birthday string, comment string) *Lead {
 	l, err := New(uuid, name, selfIdentifier, statusCode, resultSentinel, address, mail, numbers, gender, birthday, comment)
 	if err != nil {
 		panic(err)
@@ -51,7 +53,49 @@ func MustNew(uuid string, name string, selfIdentifier string, statusCode leadSta
 //
 // Important: DO NEVER USE THIS METHOD EXCEPT FROM THE REPOSITORY
 // Reason: This method initializes private state, so you could corrupt the domain.
-func UnmarshalFromRepository(uuid string, name string, selfIdentifier string, statusCode leadStatusCode, resultSentinel string, address address.Address, mail mail.Address, numbers []phonenumbers.PhoneNumber, gender string, birthday string, comment string) *Lead {
+func UnmarshalFromRepository(uuid gouuid.UUID, name string, selfIdentifier string, statusCode leadStatusCode, resultSentinel string, address address.Address, mail mail.Address, numbers []phonenumbers.PhoneNumber, gender string, birthday string, comment string) *Lead {
 	l := MustNew(uuid, name, selfIdentifier, statusCode, resultSentinel, address, mail, numbers, gender, birthday, comment)
 	return l
+}
+
+// Accessors ...
+
+// StatusCode returns statusCode value
+func (l *Lead) StatusCode() leadStatusCode {
+	return l.statusCode
+}
+
+// ResultSentinel returns resultSentinel value
+func (l *Lead) ResultSentinel() string {
+	return l.resultSentinel
+}
+
+// SetStatusCode sets statusCode value
+func (l *Lead) SetStatusCode(statusCode leadStatusCode) {
+	l.statusCode = statusCode
+}
+
+// SetResultSentinel sets resultSentinel value
+func (l *Lead) SetResultSentinel(resultSentinel string) {
+	l.resultSentinel = resultSentinel
+}
+
+// Utilities ...
+
+// Equal answers whether v is equivalent to l
+// Always returns false if v is not a Lead
+func (l Lead) Equal(v interface{}) bool {
+	other, ok := v.(Lead)
+	if !ok {
+		return false
+	}
+	if l.uuid != other.uuid {
+		return false
+	}
+	return l
+}
+
+// String implements the fmt.Stringer interface and returns the native format of Lead
+func (l Lead) String() string {
+	return fmt.Sprintf("%s ", l.name)
 }

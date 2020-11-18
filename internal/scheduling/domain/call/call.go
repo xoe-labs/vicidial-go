@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate go run github.com/xoe-labs/go-generators/ddd-domain-gen -t Call
-//go:generate go run github.com/phelmkamp/metatag
 
 package call
 

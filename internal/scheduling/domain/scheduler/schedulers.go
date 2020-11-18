@@ -1,8 +1,6 @@
 // Copyright © 2020 David Arnold <dar@xoe.solutions>
 // SPDX-License-Identifier: MIT
 
-//go:generate go run github.com/phelmkamp/metatag
-
 package scheduler
 
 import (

@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate go run github.com/xoe-labs/go-generators/ddd-domain-gen -t Scheduler
-//go:generate go run github.com/phelmkamp/metatag
 
 package scheduler
 
 import (
 	// "fmt"
 	// "github.com/pkg/errors"
+	"github.com/satori/go.uuid"
 
 	// cerrors "github.com/xoe-labs/vicidial-go/internal/common/errors"
 
@@ -20,10 +20,10 @@ import (
 
 // Scheduler represents a call scheduler for a group of agents.
 type Scheduler struct {
-	uuid string `ddd:"required'missing UUID'" meta:"equal"`
-	name string `ddd:"required"missing name'" meta:"stringer"`
+	uuid uuid.UUID `ddd:"required,missing UUID;equal"`
+	name string    `ddd:"required,missing name;stringer"`
 
-	coveredCampaigns []campaign.Campaign             `meta:"getter"`
+	coveredCampaigns []campaign.Campaign             `ddd:"getter"`
 	callQueue        []call.Call                     `ddd:"private"`
 	callQueueMinSize int                             `ddd:"required'queue min size is missing'`
 	leadQueryFilter  leadqueryfilter.LeadQueryFilter ``

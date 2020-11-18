@@ -9,7 +9,7 @@ import (
 
 	"github.com/satori/go.uuid"
 
-	l "./livecall"
+	l "github.com/xoe-labs/vicidial-go/internal/livecalling/domain/livecall"
 )
 
 // NotFoundError ...

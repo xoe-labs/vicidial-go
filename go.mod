@@ -22,12 +22,13 @@ require (
 	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/stretchr/testify v1.6.1 // indirect
+	github.com/ttacon/uri v0.0.0-20151031145549-8a81e2049497
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2
-	github.com/xoe-labs/go-generators/ddd-domain-gen v0.0.0-20201117014753-73faf3f40660 // indirect
+	github.com/xoe-labs/go-generators/ddd-domain-gen v0.0.0-20201118070946-f9fc8b0821db // indirect
 	go.uber.org/goleak v1.1.10
-	golang.org/x/sys v0.0.0-20201116194326-cc9327a14d48 // indirect
+	golang.org/x/sys v0.0.0-20201117222635-ba5294a509c7 // indirect
 	golang.org/x/text v0.3.4 // indirect
-	golang.org/x/tools v0.0.0-20201116182000-1d699438d2cf // indirect
+	golang.org/x/tools v0.0.0-20201118030313-598b068a9102 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 )

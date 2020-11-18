@@ -9,20 +9,21 @@ package campaign
 import (
 
 	// "github.com/pkg/errors"
+	"github.com/satori/go.uuid"
 
 	"github.com/xoe-labs/vicidial-go/internal/campaigns/domain/lead"
 )
 
 // Campaign represents the aggregate of the campaign service
 type Campaign struct {
-	uuid      string      `ddd:"required'missing campaign UUID'" meta:"equal"`
-	name      string      `ddd:"required'missing campaign name'" meta:"stringer"`
-	active    bool        `ddd:"private" meta:"getter"`
-	callerId  string      `meta:"stringer;getter"`
+	uuid      uuid.UUID   `ddd:"required,missing campaign UUID;equal"`
+	name      string      `ddd:"required,missing campaign name;stringer"`
+	active    bool        `ddd:"private;getter"`
+	callerId  string      `ddd:"stringer;getter"`
 	leads     []lead.Lead `meta:"filter"`
 	doNotCall []lead.Lead ``
 
-	availableResultSentinels []string `meta:"getter"`
+	availableResultSentinels []string `ddd:"getter"`
 
 	routeUUID string
 }

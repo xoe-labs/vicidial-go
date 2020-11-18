@@ -3,6 +3,8 @@ package scheduler
 
 import (
 	"errors"
+	"fmt"
+	gouuid "github.com/satori/go.uuid"
 	agent "github.com/xoe-labs/vicidial-go/internal/scheduling/domain/agent"
 	call "github.com/xoe-labs/vicidial-go/internal/scheduling/domain/call"
 	campaign "github.com/xoe-labs/vicidial-go/internal/scheduling/domain/campaign"
@@ -10,12 +12,15 @@ import (
 	"reflect"
 )
 
-// Generators ...
+// Constructors ...
 
 // New returns a guaranteed-to-be-valid Scheduler or an error
-func New(uuid string, name string, coveredCampaigns []campaign.Campaign, callQueueMinSize int, leadQueryFilter leadqueryfilter.LeadQueryFilter, assignedAgents []agent.Agent) (*Scheduler, error) {
+func New(uuid gouuid.UUID, name string, coveredCampaigns []campaign.Campaign, callQueueMinSize int, leadQueryFilter leadqueryfilter.LeadQueryFilter, assignedAgents []agent.Agent) (*Scheduler, error) {
 	if reflect.ValueOf(uuid).IsZero() {
 		return nil, errors.New("missing UUID")
+	}
+	if reflect.ValueOf(name).IsZero() {
+		return nil, errors.New("missing name")
 	}
 	s := &Scheduler{
 		assignedAgents:   assignedAgents,
@@ -29,7 +34,7 @@ func New(uuid string, name string, coveredCampaigns []campaign.Campaign, callQue
 }
 
 // MustNew returns a guaranteed-to-be-valid Scheduler or panics
-func MustNew(uuid string, name string, coveredCampaigns []campaign.Campaign, callQueueMinSize int, leadQueryFilter leadqueryfilter.LeadQueryFilter, assignedAgents []agent.Agent) *Scheduler {
+func MustNew(uuid gouuid.UUID, name string, coveredCampaigns []campaign.Campaign, callQueueMinSize int, leadQueryFilter leadqueryfilter.LeadQueryFilter, assignedAgents []agent.Agent) *Scheduler {
 	s, err := New(uuid, name, coveredCampaigns, callQueueMinSize, leadQueryFilter, assignedAgents)
 	if err != nil {
 		panic(err)
@@ -44,8 +49,35 @@ func MustNew(uuid string, name string, coveredCampaigns []campaign.Campaign, cal
 //
 // Important: DO NEVER USE THIS METHOD EXCEPT FROM THE REPOSITORY
 // Reason: This method initializes private state, so you could corrupt the domain.
-func UnmarshalFromRepository(uuid string, name string, coveredCampaigns []campaign.Campaign, callQueueMinSize int, leadQueryFilter leadqueryfilter.LeadQueryFilter, assignedAgents []agent.Agent, callQueue []call.Call) *Scheduler {
+func UnmarshalFromRepository(uuid gouuid.UUID, name string, coveredCampaigns []campaign.Campaign, callQueueMinSize int, leadQueryFilter leadqueryfilter.LeadQueryFilter, assignedAgents []agent.Agent, callQueue []call.Call) *Scheduler {
 	s := MustNew(uuid, name, coveredCampaigns, callQueueMinSize, leadQueryFilter, assignedAgents)
 	s.callQueue = callQueue
 	return s
+}
+
+// Accessors ...
+
+// CoveredCampaigns returns coveredCampaigns value
+func (s *Scheduler) CoveredCampaigns() []campaign.Campaign {
+	return s.coveredCampaigns
+}
+
+// Utilities ...
+
+// Equal answers whether v is equivalent to s
+// Always returns false if v is not a Scheduler
+func (s Scheduler) Equal(v interface{}) bool {
+	other, ok := v.(Scheduler)
+	if !ok {
+		return false
+	}
+	if s.uuid != other.uuid {
+		return false
+	}
+	return s
+}
+
+// String implements the fmt.Stringer interface and returns the native format of Scheduler
+func (s Scheduler) String() string {
+	return fmt.Sprintf("%s ", s.name)
 }

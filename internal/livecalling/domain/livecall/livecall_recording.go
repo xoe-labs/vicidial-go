@@ -9,8 +9,11 @@ import (
 	"github.com/ttacon/uri"
 
 	cerrors "github.com/xoe-labs/vicidial-go/internal/common/errors"
-	"github.com/xoe-labs/vicidial-go/internal/livecalling/domain"
 )
+
+type RecordingManager interface {
+	// StartRecording()
+}
 
 const (
 	// ErrUnableToStartRecording signals that the recording could not be started
@@ -27,13 +30,13 @@ type livecallRecording struct {
 }
 
 // StartRecording starts a recording through a communications manager
-func (l *Livecall) StartRecording(cm domain.CommManager) error {
+func (l *Livecall) StartRecording(m RecordingManager) error {
 	// TODO: implement start recording on communications manager
 	return nil
 }
 
 // StopRecording stops a recording through a communications manager
-func (l *Livecall) StopRecording(cm domain.CommManager) error {
+func (l *Livecall) StopRecording(m RecordingManager) error {
 	// TODO: implement stop recording on communications manager
 	return nil
 }

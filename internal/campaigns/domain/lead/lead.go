@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 //go:generate go run github.com/xoe-labs/go-generators/ddd-domain-gen -t Lead
-//go:generate go run github.com/phelmkamp/metatag
 //go:generate go run github.com/phelmkamp/magnum
 
 package lead
@@ -13,6 +12,7 @@ import (
 	// "github.com/pkg/errors"
 	"github.com/Boostport/address"
 	"github.com/nyaruka/phonenumbers"
+	"github.com/satori/go.uuid"
 )
 
 type leadStatusCode struct {
@@ -21,12 +21,12 @@ type leadStatusCode struct {
 
 // Lead represents a lead within a campaign
 type Lead struct {
-	uuid           string `ddd:"required'missing lead UUID'" meta:"equal"`
-	name           string `ddd:"required'missing lead name'" meta:"stringer"`
+	uuid           uuid.UUID `ddd:"required,missing lead UUID;equal"`
+	name           string    `ddd:"required,missing lead name;stringer"`
 	selfIdentifier string
 
-	statusCode     leadStatusCode `meta:"getter;setter"`
-	resultSentinel string         `meta:"getter;setter"`
+	statusCode     leadStatusCode `ddd:"getter;setter"`
+	resultSentinel string         `ddd:"getter;setter"`
 
 	address address.Address
 	mail    mail.Address

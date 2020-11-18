@@ -26,19 +26,19 @@ const (
 // PlayAudioToLocalPartyHandler knows how to play an audio
 type PlayAudioToLocalPartyHandler struct {
 	aggregate domain.Repository
-	commMgr   domain.CommManager
+	callMgr   domain.CallManager
 	policy    app.Policy
 }
 
 // NewPlayAudioToLocalPartyHandler returs a PlayAudioToLocalPartyHandler
-func NewPlayAudioToLocalPartyHandler(aggregate domain.Repository, commMgr domain.CommManager) PlayAudioToLocalPartyHandler {
+func NewPlayAudioToLocalPartyHandler(aggregate domain.Repository, callMgr domain.CallManager) PlayAudioToLocalPartyHandler {
 	if aggregate == nil {
 		panic("nil aggregate")
 	}
-	if commMgr == nil {
-		panic("nil commMgr")
+	if callMgr == nil {
+		panic("nil callMgr")
 	}
-	return PlayAudioToLocalPartyHandler{aggregate: aggregate, commMgr: commMgr}
+	return PlayAudioToLocalPartyHandler{aggregate: aggregate, callMgr: callMgr}
 }
 
 // Handle plays an audio to the local party
@@ -48,7 +48,7 @@ func (h PlayAudioToLocalPartyHandler) Handle(ctx context.Context, livecallToPlay
 		if ok := h.policy.Can(ctx, "PlayAudioToLocalParty", userID, elevationToken, *l); !ok {
 			return ErrNotAuthorizedToPlayAudioToLocalParty
 		}
-		if err := l.PlayAudioToLocalParty(h.commMgr); err != nil {
+		if err := l.PlayAudioToLocalParty(h.callMgr); err != nil {
 			return err
 		}
 		return nil
