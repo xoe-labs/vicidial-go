@@ -30,9 +30,17 @@ type Repository interface {
 	// Add adds a livecall to the repository
 	Add(ctx context.Context, l *l.Livecall) error
 
-	// Get gets a livecall from the repository by its uuid
-	Get(ctx context.Context, uuid uuid.UUID) (*l.Livecall, error)
+	// Delete deletes a livecall from the repository by its identifier
+	Delete(ctx context.Context, identifiable Identifiable) error
 
-	// Update updates a livecall in the repository by its uuid through an update function
-	Update(ctx context.Context, uuid uuid.UUID, updateFn func(l *l.Livecall) error) error
+	// Get gets a livecall from the repository by its identifier
+	Get(ctx context.Context, identifiable Identifiable) (*l.Livecall, error)
+
+	// Update updates a livecall in the repository by its identifier through an update function
+	Update(ctx context.Context, identifiable Identifiable, updateFn func(l *l.Livecall) error) error
+}
+
+// Identifiable knows how to identify an object
+type Identifiable interface {
+	Identifier() uuid.UUID
 }

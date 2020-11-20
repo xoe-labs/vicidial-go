@@ -14,7 +14,18 @@ type Application struct {
 }
 
 type Commands struct {
-	HangUp command.HangUpHandler
+	MakeOutgoingCall command.MakeOutgoingCallHandler
+	TakeIncomingCall command.TakeIncomingCallHandler
+	HangupCall       command.HangupCallHandler
+	TransferCall     command.TransferCallHandler
+	HoldCall         command.HoldCallHandler
+	UnholdCall       command.UnholdCallHandler
+
+	StartSpying command.StartSpyingHandler
+	StopSpying  command.StopSpyingHandler
+
+	StartWhispering command.StartWhisperingHandler
+	StopWhispering  command.StopWhisperingHandler
 
 	StartRecording command.StartRecordingHandler
 	StopRecording  command.StopRecordingHandler

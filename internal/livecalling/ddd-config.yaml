@@ -1,0 +1,5 @@
+aggregate:    "github.com/xoe-labs/vicidial-go/internal/livecalling/domain/livecall.Livecall"
+identifiable: "github.com/xoe-labs/vicidial-go/internal/livecalling/domain.Identifiable"
+repository:   "github.com/xoe-labs/vicidial-go/internal/livecalling/domain.Repository"
+policeable:   "github.com/xoe-labs/vicidial-go/internal/livecalling/app/policy.Policeable"
+policer:      "github.com/xoe-labs/vicidial-go/internal/livecalling/app/policy.Policer"
